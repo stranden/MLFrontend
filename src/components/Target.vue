@@ -1,10 +1,10 @@
-<!-- Targets.vue -->
+<!-- Target.vue -->
 <template>
   <div>
     <h2>Shooting Targets</h2>
     <svg class="targets-container" width="600" height="400">
-      <!-- Render targets here -->
-      <g v-for="(target, index) in targetsWithShots" :key="index">
+      <!-- Render target here -->
+      <g v-for="(target, index) in targetWithShots" :key="index">
         <circle v-for="(shot, index) in target.shots" :key="index"
           :cx="shot.x + offsetX" :cy="shot.y + offsetY" r="5" fill="red" />
         <circle :cx="offsetX" :cy="offsetY" :r="target.radius" :fill="target.color" />
