@@ -1,7 +1,5 @@
 <template>
-    <div id="shootingDispayContainer">
-        <ShooterDisplay :pushedData="fetchedData" />
-    </div>
+    <ShooterDisplay :pushedData="fetchedData" />
 </template>
 
 <script>
