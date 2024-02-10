@@ -3,16 +3,16 @@ html {
     box-sizing: border-box;
     overflow: hidden;
     font-family: Verdana, Geneva, sans-serif;
-    font-size: 4vh;
+    font-size: 1vh;
     color: #000000;
 }
 
 #app {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    /* 100% of the viewport width */
+    height: 100vh;
+    /* 100% of the viewport height */
 }
 
 #shootingDisplayContainer {
@@ -20,43 +20,151 @@ html {
     left: 5vmax;
     bottom: 5vmax;
     width: calc(100vw - 2 * 5vmax);
-    text-align: center;
     display: flex;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0); /* Alpha Transparent black */
+    gap: 2%;
 }
 
 .shootingDisplay {
     position: relative;
     flex: 1;
-    display: grid;
-    background-color: #2c3e50;
+    column-gap: 0%;
 }
 
 .shootingDisplay .target {
-    width: 10vmax; /* Adjust size as needed */
-    height: 10vmax; /* Adjust size as needed */
-    background-color: #000;
-    border-radius: 50%; /* Makes it a circle */
-    border-color: #ffffff81;
+    position: absolute;
+    top: -0.75vmax;
+    left: -0.75vmax;
+    width: 5vmax;
+    /* Adjust size as needed */
+    height: 5vmax;
+    /* Adjust size as needed */
+    border-radius: 50%;
+    /* Makes it a circle */
+    border-color: #cecece;
     border-style: solid;
+    border-width: 0.2rem;
     z-index: 10;
 }
-  
-.shootingDisplay .scoreTextTopRight {
-    position: absolute;
-    top: calc(10vmax / 2 - 1vmax);
-    right: 0;
-    width: calc(100% - 10vmax);
-    background-color: #1663b1;
+
+.shootingDisplay .scoreTextTopRightContainer,
+.shootingDisplay .scoreShotValueContainer,
+.shootingDisplay .scoreTotalContainer,
+.shootingDisplay .scoreTotalTextContainer {
+    position: relative;
+    top: 0;
 }
 
-.shootingDisplay .nameText {    
-    flex: 1; /* Takes up remaining space */ 
-    background-color: #81858a;
+.shootingDisplay .scoreTextTopRightContainer .scoreTextTopRight,
+.shootingDisplay .scoreShotValueContainer .scoreShotValue,
+.shootingDisplay .scoreTotalContainer .scoreTotal,
+.shootingDisplay .scoreTotalTextContainer .scoreTotalText {
+    position: relative;
+    left: 4.25vmax;
+    /* Adjust according to target size */
+    width: calc(100% - 4.25vmax);
+    /* Adjust width accordingly */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.shootingDisplay .clubText {    
-    flex: 1; /* Takes up remaining space */
-    background-color: #b5b8bb; 
+.shootingDisplay .scoreTextTopRightContainer {
+    background-color: #cecece;
+    border-top-right-radius: 10px;
+    opacity: 0.5;
+    /* 50% opacity */
+}
+
+.shootingDisplay .scoreTextTopRightContainer .scoreTextTopRight {
+    height: 1.5vh;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 0.8rem;
+}
+
+.shootingDisplay .scoreShotValueContainer {
+    background-color: #37a746;
+}
+
+.shootingDisplay .scoreShotValueContainer .scoreShotValue {
+    height: 2.5vh;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+
+.shootingDisplay .scoreTotalContainer,
+.shootingDisplay .scoreTotalTextContainer {
+    width: 100%;
+    /* Adjust width accordingly */
+}
+
+.shootingDisplay .scoreTotalContainer {
+    background-color: #be425d;
+    background-color: #004e0a;
+}
+
+.shootingDisplay .scoreTotalContainer .scoreTotal {
+    height: 2.5vh;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #eeeeee;
+}
+
+.shootingDisplay .scoreTotalTextContainer {
+    background-color: #cecece;
+}
+
+.shootingDisplay .scoreTotalTextContainer .scoreTotalText {
+    height: 2vh;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 0.8rem;
+}
+
+.shootingDisplay .nameTextContainer,
+.shootingDisplay .clubTextContainer {
+    width: 100%;
+}
+
+.shootingDisplay .nameTextContainer .nameText,
+.shootingDisplay .clubTextContainer .clubText {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 0.25vw;
+}
+
+
+.shootingDisplay .nameTextContainer {
+    background-color: #252525;
+}
+
+.shootingDisplay .nameTextContainer .nameText {
+    height: 2.5vh;
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: #eeeeee;
+}
+
+.shootingDisplay .clubTextContainer {
+    background-color: #cecece;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.shootingDisplay .clubTextContainer .clubText {
+    height: 2vh;
+}
+
+.shootingDisplay .clubTextContainer .clubText img {
+    height: 1vh;
+    border-radius: 25%;
+}
+
+.shootingDisplay .clubTextContainer .clubText span {
+    font-weight: bolder;
+    font-size: 1rem;
+    padding-left: 0.25vw;
 }

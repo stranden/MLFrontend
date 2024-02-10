@@ -4,43 +4,85 @@
     <div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
             <!-- Display content for more than 4 shooters -->
-            <svg class="target"></svg>
-            <div class="scoreTextTopRight">SCORE:</div>
-            <div class="">{{ data.shots[data.shots.length - 1].v }}</div>
-            <div class="nameText">{{ data.name }}</div>
-            <div class="clubText">{{ data.club }}</div>
-            <p>{{ data.totalScore }}</p>
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data.fp)" />
+            <div class="scoreTextTopRightContainer">
+                <div class="scoreTextTopRight">SCORE</div>
+            </div>
+            <div class="scoreShotValueContainer">
+                <div class="scoreShotValue">{{ data.shots[data.shots.length - 1].v }}</div>
+            </div>
+            <div class="scoreTotalContainer">
+                <div class="scoreTotal">{{ data.totalScore }}</div>
+            </div>
+            <div class="scoreTotalTextContainer">
+                <div class="scoreTotalText">Total</div>
+            </div>
+            <div class="nameTextContainer">
+                <div class="nameText">{{ data.name }}</div>
+            </div>
+            <div class="clubTextContainer">
+                <div class="clubText"><img :src="svgSource(data.club)" alt="nation" /><span>{{ data.club }}</span></div>
+            </div>
         </div>
     </div>
     <div v-else-if="numberOfShooters > 2 && numberOfShooters <= 4" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
             <!-- Display content for more than 2 or equal to 4 shooters -->
-            <svg class="target"></svg>
-            <div class="scoreTextTopRight">SCORE:</div>
-            <div class="">{{ data.shots[data.shots.length - 1].v }}</div>
-            <div class="nameText">{{ data.name }}</div>
-            <div class="clubText">{{ data.club }}</div>
-            <p>{{ data.totalScore }}</p>
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data.fp)" />
+            <div class="scoreTextTopRightContainer">
+                <div class="scoreTextTopRight">SCORE</div>
+            </div>
+            <div class="scoreShotValueContainer">
+                <div class="scoreShotValue">{{ data.shots[data.shots.length - 1].v }}</div>
+            </div>
+            <div class="scoreTotalContainer">
+                <div class="scoreTotal">{{ data.totalScore }}</div>
+            </div>
+            <div class="scoreTotalTextContainer">
+                <div class="scoreTotalText">Total</div>
+            </div>
+            <div class="nameTextContainer">
+                <div class="nameText">{{ data.name }}</div>
+            </div>
+            <div class="clubTextContainer">
+                <div class="clubText"><img :src="svgSource(data.club)" alt="nation" /><span>{{ data.club }}</span></div>
+            </div>
         </div>
     </div>
     <div v-else-if="numberOfShooters > 1 && numberOfShooters <= 2" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
             <!-- Display content for more than 1 or equal to 2 shooters -->
-            <svg class="target"></svg>
-            <div class="scoreTextTopRight">SCORE:</div>
-            <div class="">{{ data.shots[data.shots.length - 1].v }}</div>
-            <div class="nameText">{{ data.name }}</div>
-            <div class="clubText">{{ data.club }}</div>
-            <p>{{ data.totalScore }}</p>
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data.fp)" />
+            <div class="scoreTextTopRightContainer">
+                <div class="scoreTextTopRight">SCORE</div>
+            </div>
+            <div class="scoreShotValueContainer">
+                <div class="scoreShotValue">{{ data.shots[data.shots.length - 1].v }}</div>
+            </div>
+            <div class="scoreTotalContainer">
+                <div class="scoreTotal">{{ data.totalScore }}</div>
+            </div>
+            <div class="scoreTotalTextContainer">
+                <div class="scoreTotalText">Total</div>
+            </div>
+            <div class="nameTextContainer">
+                <div class="nameText">{{ data.name }}</div>
+            </div>
+            <div class="clubTextContainer">
+                <div class="clubText"><img :src="svgSource(data.club)" alt="nation" /><span>{{ data.club }}</span></div>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-//import Targets from '@/components/Targets.vue';
+import Target from '@/components/Target.vue';
 
 export default {
     name: 'ShooterDisplay',
+    components: {
+        Target
+    },
     props: {
         pushedData: {
             type: Array,
@@ -62,7 +104,7 @@ export default {
         countNumberOfShooters(array, key) {
             let count = 0;
             for (let i = 0; i < array.length; i++) {
-                if (array[i][key] === "" || array[i][key] === "P" ) {
+                if (array[i][key] === "" || array[i][key] === "P") {
                     count++;
                 }
             }
@@ -73,6 +115,21 @@ export default {
         },
         includeShootersWithFlags(array, key, value) {
             return array.filter(item => item[key] === value);
+        },
+        svgSource(country) {
+            return require(`@/assets/img/flags/${country}.svg`);
+        },
+        extractShotsForShooter(fp) {
+            const shooterData = this.pushedData.find(item => item.fp === fp);
+            this.shotsData = [];
+            if (shooterData) {
+                shooterData.shots.forEach(shot => {
+                    this.shotsData.push({
+                        x: shot.x,
+                        y: shot.y
+                    });
+                });
+            }
         }
     }
 };

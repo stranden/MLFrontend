@@ -26,7 +26,7 @@ export default {
 
             // Listen for WebSocket events to update data
             SocketService.listen('update', () => {
-            this.fetchDataAndUpdate();
+                this.fetchDataAndUpdate();
             });
         } catch (error) {
             console.error('Error fetching initial data from API:', error);

@@ -1,10 +1,10 @@
 <template>
-  <router-view />
+    <router-view />
 </template>
 
 <script>
 import '@/assets/css/style.css';
 export default {
-  name: 'MLFrontend',
+    name: 'MLFrontend',
 }
 </script>
