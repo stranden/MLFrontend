@@ -2,7 +2,7 @@
 
 // target definition JSON string
 const targetDefinitionsJSON = `{"targets":[
-    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 3.5, "layout":
+    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 3.5, "maxZoom": 3.5, "layout":
         {"width":100, "backgroundcolor":"#ffffff", "blackwidth":30.5, "blackcolor":"#000000", "rings":[
             {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "textvisible":false, "filled":true, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -17,7 +17,7 @@ const targetDefinitionsJSON = `{"targets":[
             {"number":0, "numbervaluable":false, "width":50.5, "ringvisible":false, "textvisible":false, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"}
         ]}
     },
-    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "defaultZoom": 0.8, "layout":
+    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "defaultZoom": 1, "maxZoom": 1.25, "layout":
         {"width":170, "backgroundcolor":"#ffffff", "blackwidth":59.5, "blackcolor":"#000000", "rings":[
             {"number":11, "numbervaluable":false, "width":5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":10, "numbervaluable":true, "width":11.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -37,9 +37,10 @@ const targetDefinitionsJSON = `{"targets":[
 
 let projectileDiameter;
 let defaultZoom;
+let maxZoom;
 
 // Function to calculate the zoom factor based on the shots
-function calculateZoomFactor(shots, width, projectileDiameter, defaultZoom) {
+function calculateZoomFactor(shots, width, projectileDiameter, defaultZoom, maxZoom) {
     if (shots.length > 0) {
         // Find the maximum distance of any shot from the center of the target
         const maxDistance = Math.max(
@@ -53,17 +54,9 @@ function calculateZoomFactor(shots, width, projectileDiameter, defaultZoom) {
         let zoomFactor = width / maxEffectiveDiameter;
 
         // Limit the zoom factor to 3.5 if it exceeds that value
-        zoomFactor = Math.min(zoomFactor, 3.5);
+        zoomFactor = Math.min(zoomFactor, maxZoom);
 
-        // Define the allowed zoom factors
-        const allowedZoomFactors = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5];
-
-        // Find the closest allowed zoom factor to the calculated zoom factor
-        const closestZoomFactor = allowedZoomFactors.reduce((prev, curr) => {
-            return (Math.abs(curr - zoomFactor) < Math.abs(prev - zoomFactor) ? curr : prev);
-        });
-
-        return closestZoomFactor;
+        return zoomFactor;
     }
     
     return defaultZoom // If there are no shots, return the default maximum zoom factor
@@ -143,9 +136,13 @@ function createRing(cx, cy, radius, fill, filled, number, textVisible, textColor
 export function createTarget(targetName, svg, width, shots) {
     const targetDefinitions = JSON.parse(targetDefinitionsJSON); // Parse JSON string
     const target = targetDefinitions.targets.find(target => target.targetName === targetName);
+    
+    // Global variables from targetDefinitions
     projectileDiameter = target.projectileDiameter;
     defaultZoom = target.defaultZoom;
-    const zoomFactor = calculateZoomFactor(shots, width, projectileDiameter, defaultZoom); // Calculate zoom factor based on shots
+    maxZoom = target.maxZoom;
+
+    const zoomFactor = calculateZoomFactor(shots, width, projectileDiameter, defaultZoom, maxZoom); // Calculate zoom factor based on shots
 
     if (target) {
         const layout = target.layout;
@@ -221,7 +218,7 @@ export function drawShots(targetName, targetSVG, targetContainerWidth, shots) {
     // Draw the target rings
     createTarget(targetName, targetSVG, targetContainerWidth, shots);
     
-    const zoomFactor = calculateZoomFactor(shots, targetContainerWidth, projectileDiameter, defaultZoom); // Calculate zoom factor
+    const zoomFactor = calculateZoomFactor(shots, targetContainerWidth, projectileDiameter, defaultZoom, maxZoom); // Calculate zoom factor
 
     // Adjusted center of the target
     const centerX = targetContainerWidth / 2;
