@@ -2,7 +2,7 @@
 
 // target definition JSON string
 const targetDefinitionsJSON = `{"targets":[
-    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "layout":
+    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 3.5, "layout":
         {"width":100, "backgroundcolor":"#ffffff", "blackwidth":30.5, "blackcolor":"#000000", "rings":[
             {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "textvisible":false, "filled":true, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -17,7 +17,7 @@ const targetDefinitionsJSON = `{"targets":[
             {"number":0, "numbervaluable":false, "width":50.5, "ringvisible":false, "textvisible":false, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"}
         ]}
     },
-    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "layout":
+    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "defaultZoom": 0.8, "layout":
         {"width":170, "backgroundcolor":"#ffffff", "blackwidth":59.5, "blackcolor":"#000000", "rings":[
             {"number":11, "numbervaluable":false, "width":5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":10, "numbervaluable":true, "width":11.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -36,9 +36,10 @@ const targetDefinitionsJSON = `{"targets":[
 ]}`;
 
 let projectileDiameter;
+let defaultZoom;
 
 // Function to calculate the zoom factor based on the shots
-function calculateZoomFactor(shots, width, projectileDiameter) {
+function calculateZoomFactor(shots, width, projectileDiameter, defaultZoom) {
     if (shots.length > 0) {
         // Find the maximum distance of any shot from the center of the target
         const maxDistance = Math.max(
@@ -55,7 +56,7 @@ function calculateZoomFactor(shots, width, projectileDiameter) {
         zoomFactor = Math.min(zoomFactor, 3.5);
 
         // Define the allowed zoom factors
-        const allowedZoomFactors = [1.5, 2.5, 3.5];
+        const allowedZoomFactors = [1.0, 1.5, 2.0, 2.5, 3.0, 3.5];
 
         // Find the closest allowed zoom factor to the calculated zoom factor
         const closestZoomFactor = allowedZoomFactors.reduce((prev, curr) => {
@@ -64,24 +65,25 @@ function calculateZoomFactor(shots, width, projectileDiameter) {
 
         return closestZoomFactor;
     }
-    return 3.5; // If there are no shots, return the default maximum zoom factor
+    
+    return defaultZoom // If there are no shots, return the default maximum zoom factor
 }
 
 // Function to calculate the position of text inside the circle stroke
-function calculateTextPosition(cx, cy, radius, angle) {
-    
+function calculateTextPosition(cx, cy, radius, angle, zoomFactor) {
     // Convert angle to radians
     const radians = angle * Math.PI / 180;
 
     // Calculate text position with adjustment based on zoom factor and predefined radius
-    const x = cx + radius * Math.cos(radians);
-    const y = cy + radius * Math.sin(radians);
+    const adjustedRadius = radius - 2.5 * zoomFactor; // Adjust the distance from the circle's edge as needed
+    const x = cx + adjustedRadius * Math.cos(radians);
+    const y = cy + adjustedRadius * Math.sin(radians);
 
     return { x, y };
 }
 
 // Function to create a ring element with text positioned inside it
-function createRing(cx, cy, radius, fill, filled, number, textVisible, textColor) {
+function createRing(cx, cy, radius, fill, filled, number, textVisible, textColor, zoomFactor) {
     const ringGroup = document.createElementNS("http://www.w3.org/2000/svg", 'g');
 
     const ring = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
@@ -108,7 +110,7 @@ function createRing(cx, cy, radius, fill, filled, number, textVisible, textColor
             const angle = quadrant * angleIncrement;
 
             // Calculate text position inside the circle
-            const textPosition = calculateTextPosition(cx, cy, radius, angle); // Adjust the distance from the circle's edge as needed
+            const textPosition = calculateTextPosition(cx, cy, radius, angle, zoomFactor); // Adjust the distance from the circle's edge as needed
 
             // Create text element for this position
             const textElement = document.createElementNS("http://www.w3.org/2000/svg", 'text');
@@ -142,7 +144,8 @@ export function createTarget(targetName, svg, width, shots) {
     const targetDefinitions = JSON.parse(targetDefinitionsJSON); // Parse JSON string
     const target = targetDefinitions.targets.find(target => target.targetName === targetName);
     projectileDiameter = target.projectileDiameter;
-    const zoomFactor = calculateZoomFactor(shots, width, projectileDiameter); // Calculate zoom factor based on shots
+    defaultZoom = target.defaultZoom;
+    const zoomFactor = calculateZoomFactor(shots, width, projectileDiameter, defaultZoom); // Calculate zoom factor based on shots
 
     if (target) {
         const layout = target.layout;
@@ -186,7 +189,7 @@ export function createTarget(targetName, svg, width, shots) {
         rings.forEach(ring => {
             if (ring.ringvisible) {
                 const ringRadius = (ring.width / 100) * width * zoomFactor;
-                const ringElement = createRing(width / 2, width / 2, ringRadius, ring.ringcolor, ring.filled, ring.number, ring.textvisible, ring.textcolor);
+                const ringElement = createRing(width / 2, width / 2, ringRadius, ring.ringcolor, ring.filled, ring.number, ring.textvisible, ring.textcolor, zoomFactor);
                 ringsGroup.appendChild(ringElement);
             }
         });
@@ -218,7 +221,7 @@ export function drawShots(targetName, targetSVG, targetContainerWidth, shots) {
     // Draw the target rings
     createTarget(targetName, targetSVG, targetContainerWidth, shots);
     
-    const zoomFactor = calculateZoomFactor(shots, targetContainerWidth, projectileDiameter); // Calculate zoom factor
+    const zoomFactor = calculateZoomFactor(shots, targetContainerWidth, projectileDiameter, defaultZoom); // Calculate zoom factor
 
     // Adjusted center of the target
     const centerX = targetContainerWidth / 2;
