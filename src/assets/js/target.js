@@ -2,7 +2,7 @@
 
 // target definition JSON string
 const targetDefinitionsJSON = `{"targets":[
-    {"targetID":1, "targetName":"ISSF10R", "layout":
+    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "layout":
         {"width":100, "backgroundcolor":"#ffffff", "blackwidth":30.5, "blackcolor":"#000000", "rings":[
             {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "textvisible":false, "filled":true, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -17,7 +17,7 @@ const targetDefinitionsJSON = `{"targets":[
             {"number":0, "numbervaluable":false, "width":50.5, "ringvisible":false, "textvisible":false, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"}
         ]}
     },
-    {"targetID":2, "targetName":"ISSF10P", "layout":
+    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "layout":
         {"width":170, "backgroundcolor":"#ffffff", "blackwidth":59.5, "blackcolor":"#000000", "rings":[
             {"number":11, "numbervaluable":false, "width":5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":10, "numbervaluable":true, "width":11.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -34,6 +34,8 @@ const targetDefinitionsJSON = `{"targets":[
         ]}
     }
 ]}`;
+
+let projectileDiameter;
 
 // Function to calculate the zoom factor based on the shots
 function calculateZoomFactor(shots, width, projectileDiameter) {
@@ -137,9 +139,10 @@ function createRing(cx, cy, radius, fill, filled, number, textVisible, textColor
 
 // Function to create target
 export function createTarget(targetName, svg, width, shots) {
-    const zoomFactor = calculateZoomFactor(shots, width, 4.5); // Calculate zoom factor based on shots
     const targetDefinitions = JSON.parse(targetDefinitionsJSON); // Parse JSON string
     const target = targetDefinitions.targets.find(target => target.targetName === targetName);
+    projectileDiameter = target.projectileDiameter;
+    const zoomFactor = calculateZoomFactor(shots, width, projectileDiameter); // Calculate zoom factor based on shots
 
     if (target) {
         const layout = target.layout;
@@ -195,6 +198,7 @@ export function createTarget(targetName, svg, width, shots) {
         svg.dataset.backgroundGroup = backgroundGroup;
         svg.dataset.blackCircleGroup = blackCircleGroup;
         svg.dataset.ringsGroup = ringsGroup;
+
     }
 }
 
@@ -210,17 +214,15 @@ export function drawShot(svg, x, y, radius, color, opacity) {
 }
 
 // Function to draw multiple shots onto the target SVG
-export function drawShots(targetName, svg, width, shots) {
-    const targetSVG = svg;
-    const targetContainerWidth = width;
-    const zoomFactor = calculateZoomFactor(shots, width, 4.5); // Calculate zoom factor
+export function drawShots(targetName, targetSVG, targetContainerWidth, shots) {
+    // Draw the target rings
+    createTarget(targetName, targetSVG, targetContainerWidth, shots);
+    
+    const zoomFactor = calculateZoomFactor(shots, targetContainerWidth, projectileDiameter); // Calculate zoom factor
 
     // Adjusted center of the target
     const centerX = targetContainerWidth / 2;
     const centerY = targetContainerWidth / 2;
-
-    // Draw the target rings
-    createTarget(targetName, targetSVG, targetContainerWidth, shots);
 
     if (shots.length > 0) {
         shots.forEach((shot, index) => {
@@ -228,7 +230,6 @@ export function drawShots(targetName, svg, width, shots) {
             const adjustedY = centerY + (shot.y * zoomFactor);
             const color = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
             const opacity = index === shots.length - 1 ? '1' : '0.5'; // Last shot solid, others 50%
-            const projectileDiameter = 4.5; // Diameter of the projectile in mm
             const radius = calculateShotRadius(zoomFactor, projectileDiameter);
             drawShot(targetSVG, adjustedX, adjustedY, radius, color, opacity);
         });
