@@ -215,18 +215,22 @@ export function drawShots(targetName, svg, width, shots) {
     const targetContainerWidth = width;
     const zoomFactor = calculateZoomFactor(shots, width, 4.5); // Calculate zoom factor
 
+    // Adjusted center of the target
+    const centerX = targetContainerWidth / 2;
+    const centerY = targetContainerWidth / 2;
+
     // Draw the target rings
     createTarget(targetName, targetSVG, targetContainerWidth, shots);
 
     if (shots.length > 0) {
         shots.forEach((shot, index) => {
-            const x = mapCoordinate(shot.x, width);
-            const y = mapCoordinate(shot.y, width);
+            const adjustedX = centerX + (shot.x * zoomFactor);
+            const adjustedY = centerY + (shot.y * zoomFactor);
             const color = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
             const opacity = index === shots.length - 1 ? '1' : '0.5'; // Last shot solid, others 50%
             const projectileDiameter = 4.5; // Diameter of the projectile in mm
             const radius = calculateShotRadius(zoomFactor, projectileDiameter);
-            drawShot(targetSVG, x, y, radius, color, opacity);
+            drawShot(targetSVG, adjustedX, adjustedY, radius, color, opacity);
         });
     }
 }
@@ -236,10 +240,4 @@ function calculateShotRadius(zoomFactor, projectileDiameter) {
     // Calculate radius in millimeters
     const radius = (projectileDiameter * zoomFactor);
     return radius;
-}
-
-// Function to map coordinate
-function mapCoordinate(coordinate, width) {
-    // Adjust the mapping as per your requirement based on the target size
-    return (coordinate + 5) * (width / 10); // Example mapping
 }
