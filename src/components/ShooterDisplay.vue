@@ -4,12 +4,12 @@
     <div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
             <!-- Display content for more than 4 shooters -->
-            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data.fp)" />
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" />
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
             </div>
             <div class="scoreShotValueContainer">
-                <div class="scoreShotValue">{{ data.shots[data.shots.length - 1].v }}</div>
+                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].v : '0.0' }}</div>
             </div>
             <div class="scoreTotalContainer">
                 <div class="scoreTotal">{{ data.totalScore }}</div>
@@ -28,7 +28,7 @@
     <div v-else-if="numberOfShooters > 2 && numberOfShooters <= 4" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
             <!-- Display content for more than 2 or equal to 4 shooters -->
-            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data.fp)" />
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" />
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
             </div>
@@ -52,7 +52,7 @@
     <div v-else-if="numberOfShooters > 1 && numberOfShooters <= 2" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
             <!-- Display content for more than 1 or equal to 2 shooters -->
-            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data.fp)" />
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" />
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
             </div>
@@ -119,17 +119,18 @@ export default {
         svgSource(country) {
             return require(`@/assets/img/flags/${country}.svg`);
         },
-        extractShotsForShooter(fp) {
-            const shooterData = this.pushedData.find(item => item.fp === fp);
+        extractShotsForShooter(array) {
             this.shotsData = [];
-            if (shooterData) {
-                shooterData.shots.forEach(shot => {
+            if (array) {
+                array.shots.forEach(shot => {
                     this.shotsData.push({
                         x: shot.x,
                         y: shot.y
                     });
                 });
             }
+            console.log('Extracted shots for a lane ', array.fp,' :', this.shotsData);
+            return this.shotsData
         }
     }
 };

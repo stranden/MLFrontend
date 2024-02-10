@@ -1,30 +1,48 @@
 <template>
-    <div v-for="(data, index) in shots" :key="index" class="shootingDisplay">
-        <p>{{ data.x }}</p>
-        <p>{{ data.y }}</p>
-        <p>{{ data.nr }}</p>
-    </div>
-    <!--<svg class="target" ref="targetSVG"></svg>-->
+    <svg class="target" ref="targetSVG"></svg>
 </template>
 
 <script>
-//import { drawTargetWithShots } from '@/assets/js/target.js'; // Import the drawTargetWithShots function
+import { /*createTarget,*/ drawShots } from '@/assets/js/target.js'; 
 
 export default {
     name: 'ShootingTarget',
     props: {
         targetName: {
-            type: String, // Change type to String
+            type: String,
             required: true
         },
-        shots: {
+        shotData: {
             type: Array,
             required: true
         }
     },
-    /*mounted() {
-        drawTargetWithShots(this.targetName, this.$refs.targetSVG, this.shots);
-    }*/
+    mounted() {
+        //this.drawTarget();
+        this.drawShots();
+    },
+    watch: {
+        shotData: {
+            handler() {
+                this.drawShots();
+            },
+            deep: true
+        }
+    },
+    methods: {
+        /*drawTarget() {
+            const targetSVG = this.$refs.targetSVG;
+            const targetContainerWidth = targetSVG.clientWidth;
+            createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
+        },*/
+        drawShots() {
+            //if (this.shotData.length > 0) {
+                const targetSVG = this.$refs.targetSVG;
+                const targetContainerWidth = targetSVG.clientWidth;
+                drawShots(this.targetName, targetSVG, targetContainerWidth, this.shotData);
+            //}
+        }
+    }
 };
 </script>
 

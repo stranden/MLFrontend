@@ -9,10 +9,8 @@ html {
 
 #app {
     position: absolute;
-    width: 100vw;
-    /* 100% of the viewport width */
-    height: 100vh;
-    /* 100% of the viewport height */
+    width: 100vw; /* 100% of the viewport width */
+    height: 100vh; /* 100% of the viewport height */
 }
 
 #shootingDisplayContainer {
@@ -35,16 +33,13 @@ html {
     position: absolute;
     top: -0.75vmax;
     left: -0.75vmax;
-    width: 5vmax;
-    /* Adjust size as needed */
-    height: 5vmax;
-    /* Adjust size as needed */
-    border-radius: 50%;
-    /* Makes it a circle */
+    width: 5vmax; /* Adjust size as needed */
+    height: 5vmax; /* Adjust size as needed */
+    border-radius: 50%; /* Makes it a circle */
     border-color: #cecece;
     border-style: solid;
     border-width: 0.2rem;
-    z-index: 10;
+    z-index: 2;
 }
 
 .shootingDisplay .scoreTextTopRightContainer,
@@ -60,10 +55,8 @@ html {
 .shootingDisplay .scoreTotalContainer .scoreTotal,
 .shootingDisplay .scoreTotalTextContainer .scoreTotalText {
     position: relative;
-    left: 4.25vmax;
-    /* Adjust according to target size */
-    width: calc(100% - 4.25vmax);
-    /* Adjust width accordingly */
+    left: 4.25vmax; /* Adjust according to target size */
+    width: calc(100% - 4.25vmax); /* Adjust width accordingly */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -72,8 +65,7 @@ html {
 .shootingDisplay .scoreTextTopRightContainer {
     background-color: #cecece;
     border-top-right-radius: 10px;
-    opacity: 0.5;
-    /* 50% opacity */
+    opacity: 0.5; /* 50% opacity */
 }
 
 .shootingDisplay .scoreTextTopRightContainer .scoreTextTopRight {
@@ -96,8 +88,7 @@ html {
 
 .shootingDisplay .scoreTotalContainer,
 .shootingDisplay .scoreTotalTextContainer {
-    width: 100%;
-    /* Adjust width accordingly */
+    width: 100%; /* Adjust width accordingly */
 }
 
 .shootingDisplay .scoreTotalContainer {
@@ -139,6 +130,7 @@ html {
 
 .shootingDisplay .nameTextContainer {
     background-color: #252525;
+    opacity: 0.5; /* 50% opacity */
 }
 
 .shootingDisplay .nameTextContainer .nameText {
