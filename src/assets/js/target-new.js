@@ -2,7 +2,7 @@
 
 // target definition JSON string
 const targetDefinitionsJSON = `{"targets":[
-    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 3.25, "maxZoom": 3.25, "layout":
+    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 4, "maxZoom": 4, "layout":
         {"width":100, "backgroundcolor":"#ffffff", "blackwidth":30.5, "blackcolor":"#000000", "rings":[
             {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "textvisible":false, "filled":true, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -121,6 +121,16 @@ function createRing(cx, cy, radius, fill, filled, number, textVisible, textColor
             ringGroup.appendChild(textElement);
         }
     }
+
+    // Add circle for text
+    const textCircle = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
+    textCircle.setAttribute('cx', cx);
+    textCircle.setAttribute('cy', cy);
+    textCircle.setAttribute('r', radius); // Set the same radius as the ring
+    textCircle.setAttribute('fill', 'none'); // No fill
+    textCircle.setAttribute('stroke', 'none'); // No stroke
+    ringGroup.appendChild(textCircle);
+
     return ringGroup;
 }
 
@@ -221,7 +231,7 @@ export function drawShots(targetName, targetSVG, containerWidth, shots) {
     if (shots.length > 0) {
         shots.forEach((shot, index) => {
             const adjustedX = centerX + (shot.x * zoomFactor);
-            const adjustedY = centerY - (shot.y * zoomFactor);
+            const adjustedY = centerY + (shot.y * zoomFactor);
             const color = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
             const opacity = index === shots.length - 1 ? '1' : '0.5'; // Last shot solid, others 50%
             const radius = calculateShotRadius(zoomFactor, projectileDiameter);
@@ -233,7 +243,7 @@ export function drawShots(targetName, targetSVG, containerWidth, shots) {
 // Function to calculate shot radius based on zoom factor and projectile diameter
 function calculateShotRadius(zoomFactor, projectileDiameter) {
     // Calculate radius in millimeters
-    const radius = (projectileDiameter * zoomFactor);
+    const radius = (projectileDiameter * zoomFactor) / 2;
     return radius;
 }
 
