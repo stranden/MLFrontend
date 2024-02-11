@@ -2,7 +2,7 @@
 
 // target definition JSON string
 const targetDefinitionsJSON = `{"targets":[
-    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 1, "maxZoom": 3.25, "layout":
+    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 3.25, "maxZoom": 3.25, "layout":
         {"width":100, "backgroundcolor":"#ffffff", "blackwidth":30.5, "blackcolor":"#000000", "rings":[
             {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "textvisible":false, "filled":true, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -17,7 +17,7 @@ const targetDefinitionsJSON = `{"targets":[
             {"number":0, "numbervaluable":false, "width":50.5, "ringvisible":false, "textvisible":false, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"}
         ]}
     },
-    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "defaultZoom": 0.5, "maxZoom": 3.25, "layout":
+    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "defaultZoom": 1.5, "maxZoom": 1.5, "layout":
         {"width":170, "backgroundcolor":"#ffffff", "blackwidth":59.5, "blackcolor":"#000000", "rings":[
             {"number":11, "numbervaluable":false, "width":5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":10, "numbervaluable":true, "width":11.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
