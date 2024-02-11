@@ -2,7 +2,7 @@
 
 // target definition JSON string
 const targetDefinitionsJSON = `{"targets":[
-    {"targetName":"ISSF10R", "projectileDiameter": 4.5, "defaultZoom": 3.25, "maxZoom": 3.25, "layout":
+    {"targetName":"ISSF10R", "projectileDiameter":4.5, "projectileFill":true, "projectileBorder":false, "defaultZoom":3.25, "maxZoom":3.25, "layout":
         {"width":100, "backgroundcolor":"#ffffff", "blackwidth":30.5, "blackcolor":"#000000", "rings":[
             {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "textvisible":false, "filled":true, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -17,7 +17,7 @@ const targetDefinitionsJSON = `{"targets":[
             {"number":0, "numbervaluable":false, "width":50.5, "ringvisible":false, "textvisible":false, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"}
         ]}
     },
-    {"targetName":"ISSF10P", "projectileDiameter": 4.5, "defaultZoom": 1.5, "maxZoom": 1.5, "layout":
+    {"targetName":"ISSF10P", "projectileDiameter":4.5, "projectileFill":false, "projectileBorder":true, "defaultZoom":2, "maxZoom":2, "layout":
         {"width":170, "backgroundcolor":"#ffffff", "blackwidth":59.5, "blackcolor":"#000000", "rings":[
             {"number":11, "numbervaluable":false, "width":5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
             {"number":10, "numbervaluable":true, "width":11.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
@@ -252,23 +252,30 @@ export function createTarget(targetName, targetSVG, containerWidth, shots) {
     }
 
     if (shots.length > 0) {
-        drawShots(targetSVG, containerWidth, shots, zoomFactor)
+        drawShots(targetSVG, containerWidth, shots, zoomFactor, target.targetName)
     }
 }
 
 // Function to draw a single shot onto the target SVG
-export function drawShot(targetSVG, x, y, radius, color, opacity) {
+export function drawShot(targetSVG, x, y, radius, filled, fillColor, opacity, strokefilled, strokeColor, strokeWidth) {
     const shot = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     shot.setAttribute('cx', x);
     shot.setAttribute('cy', y);
     shot.setAttribute('r', radius); // Set the radius dynamically
-    shot.setAttribute('fill', color);
+    shot.setAttribute('fill', filled ? fillColor : 'none');
     shot.setAttribute('fill-opacity', opacity);
+    shot.setAttribute('stroke', strokefilled ? strokeColor : 'none');
+    shot.setAttribute('stroke-width', strokefilled ? strokeWidth : '0');
+    shot.setAttribute('stroke-location', 'outside');
+    shot.setAttribute('stroke-opacity', opacity);
     targetSVG.appendChild(shot);
+    
 }
 
 // Function to draw multiple shots onto the target SVG
-export function drawShots(targetSVG, containerWidth, shots, zoomFactor) {
+export function drawShots(targetSVG, containerWidth, shots, zoomFactor, targetName) {
+    // Retrieve the target definition based on the target name
+    const target = JSON.parse(targetDefinitionsJSON).targets.find(target => target.targetName === targetName);
 
     // Adjusted center of the target
     const centerX = containerWidth / 2;
@@ -276,12 +283,18 @@ export function drawShots(targetSVG, containerWidth, shots, zoomFactor) {
 
     if (shots.length > 0) {
         shots.forEach((shot, index) => {
-            const adjustedX = centerX + (convertMillimeterToPixel(shot.x) / 2) * zoomFactor;
-            const adjustedY = centerY - (convertMillimeterToPixel(shot.y) / 2) * zoomFactor;
-            const color = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
+            const divisionFactor = target.layout.rings[0].numbervaluable ? 2 : 3.25;
+            console.log(`Division Factor in drawShots: ${divisionFactor}`)
+            console.log(`Zoom Factor in drawShots: ${zoomFactor}`)
+
+            const fillColor = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
+            const strokeColor = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
+            const strokeWidth = (projectileDiameterInPixel / 2) * zoomFactor;
+            const adjustedX = centerX + (convertMillimeterToPixel(shot.x) / divisionFactor) * zoomFactor;
+            const adjustedY = centerY - (convertMillimeterToPixel(shot.y) / divisionFactor) * zoomFactor;
             const opacity = index === shots.length - 1 ? '1' : '0.5'; // Last shot solid, others 50%
             const radius = projectileDiameterInPixel * zoomFactor;
-            drawShot(targetSVG, adjustedX, adjustedY, radius, color, opacity);
+            drawShot(targetSVG, adjustedX, adjustedY, radius, target.projectileFill, fillColor, opacity, target.projectileBorder, strokeColor, strokeWidth);
         });
     }
 }
