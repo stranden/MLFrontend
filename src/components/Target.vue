@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import { /*createTarget,*/ drawShots } from '@/assets/js/target.js'; 
+import { createTarget } from '@/assets/js/target.js'; 
 
 export default {
     name: 'ShootingTarget',
@@ -18,29 +18,21 @@ export default {
         }
     },
     mounted() {
-        //this.drawTarget();
-        this.drawShots();
+        this.drawTarget();
     },
     watch: {
         shotData: {
             handler() {
-                this.drawShots();
+                this.drawTarget();
             },
             deep: true
         }
     },
     methods: {
-        /*drawTarget() {
+        drawTarget() {
             const targetSVG = this.$refs.targetSVG;
             const targetContainerWidth = targetSVG.clientWidth;
             createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
-        },*/
-        drawShots() {
-            //if (this.shotData.length > 0) {
-                const targetSVG = this.$refs.targetSVG;
-                const targetContainerWidth = targetSVG.clientWidth;
-                drawShots(this.targetName, targetSVG, targetContainerWidth, this.shotData);
-            //}
         }
     }
 };
