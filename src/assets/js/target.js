@@ -158,7 +158,7 @@ function calculateZoomFactor(shots, containerWidth, defaultZoom, maxZoom) {
 }*/
 
 // Function to calculate the position of text inside the circle stroke
-/*function calculateTextPosition(cx, cy, radius, angle) {
+function calculateTextPosition(cx, cy, radius, angle) {
     // Convert angle to radians
     const radians = angle * Math.PI / 180;
 
@@ -167,28 +167,25 @@ function calculateZoomFactor(shots, containerWidth, defaultZoom, maxZoom) {
     const y = cy + radius * Math.sin(radians);
 
     return { x, y };
-}*/
+}
 
 // Function to create a ring element with text positioned inside it
-//function createRing(cx, cy, radius, fill, filled, number, textVisible, textColor, zoomFactor, currentRingIndex, rings) {
-function createRing(cx, cy, radius, fill, filled) {
+function createRing(cx, cy, cirleRadius, fill, filled, number, textRadius, textVisible, textColor) {
+//function createRing(cx, cy, radius, fill, filled) {
     //const width = containerWidth * widthRatio; // Calculate the width based on the container width and the width ratio
     const ringGroup = document.createElementNS("http://www.w3.org/2000/svg", 'g');
 
     const ring = document.createElementNS("http://www.w3.org/2000/svg", 'circle');
     ring.setAttribute('cx', cx);
     ring.setAttribute('cy', cy);
-    ring.setAttribute('r', radius); // Set the radius as half of the width
+    ring.setAttribute('r', cirleRadius); // Set the radius as half of the width
     ring.setAttribute('fill', filled ? fill : 'none'); // Fill the ring if it's filled, otherwise set fill to 'none'
     ring.setAttribute('stroke', fill); // Set stroke color
     ring.setAttribute('stroke-width', filled ? 0 : 0.5); // Set stroke width based on filled status
     ringGroup.appendChild(ring);
 
     // Add text if textVisible is true
-    /*if (textVisible) {
-        // Calculate the inner radius based on the width of the current ring and the adjacent ring
-        const innerRadius = calculateInnerRadius(currentRingIndex, rings);
-
+    if (textVisible) {
 
         // Calculate angle increment for placing text
         const angleIncrement = 360 / 4; // Divide the circle into 4 quadrants
@@ -199,26 +196,21 @@ function createRing(cx, cy, radius, fill, filled) {
             const angle = quadrant * angleIncrement;
 
             // Calculate text position inside the circle
-            const textPosition = calculateTextPosition(cx, cy, innerRadius, angle, zoomFactor); 
+            const textPosition = calculateTextPosition(cx, cy, textRadius, angle); // Adjust the distance from the circle's edge as needed
 
-            // Create text element for this position
             const textElement = document.createElementNS("http://www.w3.org/2000/svg", 'text');
             textElement.setAttribute('x', textPosition.x);
             textElement.setAttribute('y', textPosition.y);
             textElement.setAttribute('text-anchor', 'middle');
             textElement.setAttribute('alignment-baseline', 'middle');
             textElement.setAttribute('fill', textColor); // Set text color
-
-            // Calculate font size based on zoom factor
-            //const fontSize = calculateFontSize(radius, rings[currentRingIndex + 1].width, zoomFactor); // Adjust font size relative to the next ring's width
-            //textElement.setAttribute('font-size', fontSize);
-
             textElement.textContent = number.toString();
 
             // Append text element to ring group
             ringGroup.appendChild(textElement);
+
         }
-    }*/
+    }
 
     return ringGroup;
 }
@@ -279,10 +271,11 @@ export function createTarget(targetName, targetSVG, containerWidth, shots) {
         rings.forEach((ring) => {
                 if (ring.ringvisible) {
                 const ringRadius = adjustWidthInPixel(containerWidth, convertMillimeterToPixel(layout.width), convertMillimeterToPixel(ring.width)) * zoomFactor;
+                const textRadius = adjustWidthInPixel(containerWidth, convertMillimeterToPixel(layout.width), convertMillimeterToPixel(ring.text.width)) * zoomFactor;
                 //const ringRadius = adjustWidthInPixel(containerWidth, convertMillimeterToPixel(layout.width), convertMillimeterToPixel(ring.width));
                 //const ringElement = createRing(containerWidth / 2, containerWidth / 2, ringRadius, ring.ringcolor, ring.filled, ring.number, ring.textvisible, ring.textcolor, zoomFactor, index, rings);
                 //const ringElement = createRing(containerWidth / 2, containerWidth / 2, ringRadius, ring.ringcolor, ring.filled, ring.number, ring.textvisible, ring.textcolor, zoomFactor);
-                const ringElement = createRing(containerWidth / 2, containerWidth / 2, ringRadius, ring.ringcolor, ring.filled, ring.number, ring.textvisible, ring.textcolor);
+                const ringElement = createRing(containerWidth / 2, containerWidth / 2, ringRadius, ring.ringcolor, ring.filled, ring.number, textRadius, ring.text.textvisible, ring.text.textcolor);
                 ringsGroup.appendChild(ringElement);
             }
         });
