@@ -9,7 +9,7 @@
                 <div class="scoreTextTopRight">SCORE</div>
             </div>
             <div class="scoreShotValueContainer">
-                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].v : '0.0' }}</div>
+                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
             </div>
             <div class="scoreTotalContainer">
                 <div class="scoreTotal">{{ data.totalScore }}</div>
@@ -33,7 +33,7 @@
                 <div class="scoreTextTopRight">SCORE</div>
             </div>
             <div class="scoreShotValueContainer">
-                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].v : '0.0' }}</div>
+                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
             </div>
             <div class="scoreTotalContainer">
                 <div class="scoreTotal">{{ data.totalScore }}</div>
@@ -57,7 +57,7 @@
                 <div class="scoreTextTopRight">SCORE</div>
             </div>
             <div class="scoreShotValueContainer">
-                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].v : '0.0' }}</div>
+                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
             </div>
             <div class="scoreTotalContainer">
                 <div class="scoreTotal">{{ data.totalScore }}</div>

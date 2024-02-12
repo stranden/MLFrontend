@@ -287,12 +287,12 @@ export function drawShots(targetSVG, containerWidth, shots, zoomFactor, targetNa
             console.log(`Division Factor in drawShots: ${divisionFactor}`)
             console.log(`Zoom Factor in drawShots: ${zoomFactor}`)
 
-            const fillColor = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
-            const strokeColor = index === shots.length - 1 ? 'red' : 'grey'; // Last shot red, others grey
+            const fillColor = index === shots.length - 1 ? 'red' : 'green'; // Last shot red, others grey
+            const strokeColor = index === shots.length - 1 ? 'red' : 'green'; // Last shot red, others grey
             const strokeWidth = (projectileDiameterInPixel / 2) * zoomFactor;
             const adjustedX = centerX + (convertMillimeterToPixel(shot.x) / divisionFactor) * zoomFactor;
             const adjustedY = centerY - (convertMillimeterToPixel(shot.y) / divisionFactor) * zoomFactor;
-            const opacity = index === shots.length - 1 ? '1' : '0.5'; // Last shot solid, others 50%
+            const opacity = index === shots.length - 1 ? '1' : '0.9'; // Last shot solid, others 50%
             const radius = projectileDiameterInPixel * zoomFactor;
             drawShot(targetSVG, adjustedX, adjustedY, radius, target.projectileFill, fillColor, opacity, target.projectileBorder, strokeColor, strokeWidth);
         });
