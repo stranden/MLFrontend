@@ -4,33 +4,79 @@
 const targetDefinitionsJSON = `{"targets":[
     {"targetName":"ISSF10R", "projectileDiameter":4.5, "projectileFill":true, "projectileBorder":false, "defaultZoom":3.25, "maxZoom":3.25, "layout":
         {"width":100, "backgroundcolor":"#ffffff", "blackwidth":30.5, "blackcolor":"#000000", "rings":[
-            {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "textvisible":false, "filled":true, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":8, "numbervaluable":true, "width":10.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":7, "numbervaluable":true, "width":15.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":6, "numbervaluable":true, "width":20.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":5, "numbervaluable":true, "width":25.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":4, "numbervaluable":true, "width":30.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#ffffff"},
-            {"number":3, "numbervaluable":true, "width":35.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":2, "numbervaluable":true, "width":40.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":1, "numbervaluable":true, "width":45.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":0, "numbervaluable":false, "width":50.5, "ringvisible":false, "textvisible":false, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"}
+            {"number":10, "numbervaluable":true, "width":0.5, "ringvisible":true, "filled":true, "ringcolor":"#ffffff", "text":
+                {"textvisible":false, "textcolor":"#ffffff", "width": "0.25"}
+            },
+            {"number":9, "numbervaluable":true, "width":5.5, "ringvisible":true, "filled":false, "ringcolor":"#ffffff", "text":
+                {"textvisible":false, "textcolor":"#ffffff", "width": "3"}
+            },
+            {"number":8, "numbervaluable":true, "width":10.5, "ringvisible":true, "filled":false, "ringcolor":"#ffffff", "text":
+                {"textvisible":true, "textcolor":"#ffffff", "width": "8"}
+            },
+            {"number":7, "numbervaluable":true, "width":15.5, "ringvisible":true, "filled":false, "ringcolor":"#ffffff", "text":
+                {"textvisible":true, "textcolor":"#ffffff", "width": "13"}
+            },
+            {"number":6, "numbervaluable":true, "width":20.5, "ringvisible":true, "filled":false, "ringcolor":"#ffffff", "text":
+                {"textvisible":true, "textcolor":"#ffffff", "width": "18"}
+            },
+            {"number":5, "numbervaluable":true, "width":25.5, "ringvisible":true, "filled":false, "ringcolor":"#ffffff", "text":
+                {"textvisible":true, "textcolor":"#ffffff", "width": "23"}
+            },
+            {"number":4, "numbervaluable":true, "width":30.5, "ringvisible":true, "filled":false, "ringcolor":"#000000", "text":
+                {"textvisible":true, "textcolor":"#ffffff", "width": "28"}
+            },
+            {"number":3, "numbervaluable":true, "width":35.5, "ringvisible":true, "filled":false, "ringcolor":"#000000", "text":
+                {"textvisible":true, "textcolor":"#000000", "width": "33"}
+            },
+            {"number":2, "numbervaluable":true, "width":40.5, "ringvisible":true, "filled":false, "ringcolor":"#000000", "text":
+                {"textvisible":true, "textcolor":"#000000", "width": "38"}
+            },
+            {"number":1, "numbervaluable":true, "width":45.5, "ringvisible":true, "filled":false, "ringcolor":"#000000", "text":
+                {"textvisible":true, "textcolor":"#000000", "width": "43"}
+            },
+            {"number":0, "numbervaluable":false, "width":50.5, "ringvisible":false, "filled":false, "ringcolor":"#000000", "text":
+                {"textvisible":false, "textcolor":"#000000", "width": "48"}
+            }
         ]}
     },
-    {"targetName":"ISSF10P", "projectileDiameter":4.5, "projectileFill":false, "projectileBorder":true, "defaultZoom":2, "maxZoom":2, "layout":
-        {"width":170, "backgroundcolor":"#ffffff", "blackwidth":59.5, "blackcolor":"#000000", "rings":[
-            {"number":11, "numbervaluable":false, "width":5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":10, "numbervaluable":true, "width":11.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":9, "numbervaluable":true, "width":27.5, "ringvisible":true, "textvisible":false, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":8, "numbervaluable":true, "width":43.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#ffffff", "textcolor":"#ffffff"},
-            {"number":7, "numbervaluable":true, "width":59.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#ffffff"},
-            {"number":6, "numbervaluable":true, "width":75.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":5, "numbervaluable":true, "width":91.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":4, "numbervaluable":true, "width":107.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":3, "numbervaluable":true, "width":123.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":2, "numbervaluable":true, "width":139.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":1, "numbervaluable":true, "width":155.5, "ringvisible":true, "textvisible":true, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"},
-            {"number":0, "numbervaluable":false, "width":171.5, "ringvisible":false, "textvisible":false, "filled":false, "ringcolor":"#000000", "textcolor":"#000000"}
+    {"targetName": "ISSF10P", "projectileDiameter": 4.5, "projectileFill": false, "projectileBorder": true, "defaultZoom": 2, "maxZoom": 2, "layout":
+        {"width": 170, "backgroundcolor": "#ffffff", "blackwidth": 59.5, "blackcolor": "#000000", "rings": [
+            {"number": 11, "numbervaluable": false, "width": 5, "ringvisible": true, "filled": false, "ringcolor": "#ffffff", "text":
+                {"textvisible": false, "textcolor": "#ffffff", "width": 2.5}
+            },
+            {"number": 10, "numbervaluable": true, "width": 11.5, "ringvisible": true, "filled": false, "ringcolor": "#ffffff", "text":
+                {"textvisible": false, "textcolor": "#ffffff", "width": 7.25}
+            },
+            {"number": 9, "numbervaluable": true, "width": 27.5, "ringvisible": true, "filled": false, "ringcolor": "#ffffff", "text":
+                {"textvisible": false, "textcolor": "#ffffff", "width": 20.5}
+            },
+            {"number": 8, "numbervaluable": true, "width": 43.5, "ringvisible": true, "filled": false, "ringcolor": "#ffffff", "text":
+                {"textvisible": true, "textcolor": "#ffffff", "width": 35.5}
+            },
+            {"number": 7, "numbervaluable": true, "width": 59.5, "ringvisible": true, "filled": false, "ringcolor": "#ffffff", "text":
+                {"textvisible": true, "textcolor": "#ffffff", "width": 51.5}
+            },
+            {"number": 6, "numbervaluable": true, "width": 75.5, "ringvisible": true, "filled": false, "ringcolor": "#000000", "text":
+                {"textvisible": true, "textcolor": "#000000", "width": 67.5}
+            },
+            {"number": 5, "numbervaluable": true, "width": 91.5, "ringvisible": true, "filled": false, "ringcolor": "#000000", "text":
+                {"textvisible": true, "textcolor": "#000000", "width": 83.5}
+            },
+            {"number": 4, "numbervaluable": true, "width": 107.5, "ringvisible": true, "filled": false, "ringcolor": "#000000", "text":
+                {"textvisible": true, "textcolor": "#000000", "width": 99.5}
+            },
+            {"number": 3, "numbervaluable": true, "width": 123.5, "ringvisible": true, "filled": false, "ringcolor": "#000000", "text":
+                {"textvisible": true, "textcolor": "#000000", "width": 115.5}
+            },
+            {"number": 2, "numbervaluable": true, "width": 139.5, "ringvisible": true, "filled": false, "ringcolor": "#000000", "text":
+                {"textvisible": true, "textcolor": "#000000", "width": 131.5}
+            },
+            {"number": 1, "numbervaluable": true, "width": 155.5, "ringvisible": true, "filled": false, "ringcolor": "#000000", "text":
+                {"textvisible": true, "textcolor": "#000000", "width": 147.5}
+            },
+            {"number": 0, "numbervaluable": false, "width": 171.5, "ringvisible": false, "filled": false, "ringcolor": "#000000", "text":
+                {"textvisible": false, "textcolor": "#000000", "width": 163.5}
+            }
         ]}
     }
 ]}`;
