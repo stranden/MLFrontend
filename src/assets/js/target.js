@@ -136,20 +136,6 @@ function calculateZoomFactor(shots, containerWidth, defaultZoom, maxZoom) {
     return defaultZoom; // If there are no shots, return the default zoom factor
 }
 
-
-// Function to calculate the inner radius between two rings, ensuring text positioning between them
-/*function calculateInnerRadius(currentRingIndex, rings) {
-    if (currentRingIndex === 0) {
-        return 0; // If the current ring is the first ring, its inner radius is 0
-    } else {
-        const currentRing = rings[currentRingIndex];
-        const previousRing = rings[currentRingIndex - 1];
-        // Calculate the inner radius as the average of the outer radius of the previous ring and the current ring
-        // This ensures that the text is positioned between the rings
-        return (previousRing.width + currentRing.width) / 2;
-    }
-}*/
-
 // Function to calculate font size based on ring width and zoom factor
 /*function calculateFontSize(radius, nextRingWidth, zoomFactor) {
     // Adjust font size based on the ratio between the radius and the next ring's width
