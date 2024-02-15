@@ -1,9 +1,9 @@
 <!-- ShooterDisplay.vue -->
 <template>
     <h1>Number of shoorters {{ numberOfShooters }}</h1>
-    <div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">
+    <!--<div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">-->
+    <div id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
-            <!-- Display content for more than 4 shooters -->
             <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" />
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
@@ -25,9 +25,8 @@
             </div>
         </div>
     </div>
-    <div v-else-if="numberOfShooters > 2 && numberOfShooters <= 4" id="shootingDisplayContainer">
+    <!--<div v-else-if="numberOfShooters > 2 && numberOfShooters <= 4" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
-            <!-- Display content for more than 2 or equal to 4 shooters -->
             <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" />
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
@@ -51,7 +50,6 @@
     </div>
     <div v-else-if="numberOfShooters > 1 && numberOfShooters <= 2" id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
-            <!-- Display content for more than 1 or equal to 2 shooters -->
             <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" />
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
@@ -72,7 +70,7 @@
                 <div class="clubText"><img :src="svgSource(data.club)" alt="nation" /><span>{{ data.club }}</span></div>
             </div>
         </div>
-    </div>
+    </div>-->
 </template>
 
 <script>
