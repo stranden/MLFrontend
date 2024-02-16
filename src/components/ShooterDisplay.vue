@@ -1,6 +1,6 @@
 <!-- ShooterDisplay.vue -->
 <template>
-    <h1>Number of shoorters {{ numberOfShooters }}</h1>
+    <!--<h1>Number of shoorters {{ numberOfShooters }}</h1>-->
     <!--<div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">-->
     <div id="shootingDisplayContainer">
         <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
