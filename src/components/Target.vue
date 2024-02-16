@@ -15,6 +15,10 @@ export default {
         shotData: {
             type: Array,
             required: true
+        },
+        flags: {
+            type: String,
+            required: true
         }
     },
     mounted() {
@@ -29,10 +33,38 @@ export default {
         }
     },
     methods: {
-        drawTarget() {
+        /*drawTarget() {
             const targetSVG = this.$refs.targetSVG;
             const targetContainerWidth = targetSVG.clientWidth;
             createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
+        }*/
+        drawTarget() {
+            const targetSVG = this.$refs.targetSVG;
+            const targetContainerWidth = targetSVG.clientWidth;
+
+            // Clear previous contents
+            while (targetSVG.firstChild) {
+                targetSVG.removeChild(targetSVG.firstChild);
+            }
+
+            // Draw target content using your createTarget function
+            createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
+
+            if (this.flags !== ''){
+                // Create circle element for overlay
+                const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                circle.setAttribute("cx", "50%");
+                circle.setAttribute("cy", "50%");
+                circle.setAttribute("r", "50%"); // Circle radius as 50% of container size
+                if (this.flags === 'E') {
+                    circle.setAttribute("fill", "rgba(128, 128, 128, 0.75)"); // Grey with 50% opacity for E
+                }
+                if (this.flags === 'P') {
+                    circle.setAttribute("fill", "rgba(190, 28, 28, 0.25)"); // Red with 50% opacity for P
+                }
+                // Append circle to SVG
+                targetSVG.appendChild(circle);
+            }
         }
     }
 };

@@ -29,6 +29,34 @@ html {
     column-gap: 0%;
 }
 
+.shootingDisplayE::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.75); /* Grey with 75% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.shootingDisplayP::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(190, 28, 28, 0.25); /* Red with 50% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
 .shootingDisplay .target {
     position: absolute;
     top: -0.75vmax;

@@ -3,8 +3,8 @@
     <!--<h1>Number of shoorters {{ numberOfShooters }}</h1>-->
     <!--<div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">-->
     <div id="shootingDisplayContainer">
-        <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay">
-            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" />
+        <div v-for="(data, index) in allShooters" :key="index" :class="{ 'shootingDisplayE': data.flags === 'E', 'shootingDisplayP': data.flags === 'P', 'shootingDisplay': true }">
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags"/>
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
             </div>
@@ -118,7 +118,7 @@ export default {
             return array.filter(item => item[key] === value);
         },
         includeAllShooters(array) {
-            return array.filter(item => item['flags'] === '' && item['flags'] === 'E' && item['flags'] === 'P');
+            return array.filter(item => item['flags'] === '' || item['flags'] === 'E' || item['flags'] === 'P');
         },
         svgSource(country) {
             if (country) {
