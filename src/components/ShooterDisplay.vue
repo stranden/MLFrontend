@@ -95,7 +95,7 @@ export default {
             return this.removeShootersWithFlags(this.pushedData, 'flags', "E")
         },
         allShooters() {
-            return this.includeShootersWithFlags(this.pushedData, 'flags', "E")
+            return this.allShooters(this.pushedData)
         },
         elimatedShooter() {
             return this.includeShootersWithFlags(this.pushedData, 'flags', "P")
@@ -116,6 +116,9 @@ export default {
         },
         includeShootersWithFlags(array, key, value) {
             return array.filter(item => item[key] === value);
+        },
+        allShooters(array) {
+            return array.filter(item => item['flags'] === '' && item['flags'] === 'E' && item['flags'] === 'P');
         },
         svgSource(country) {
             if (country) {
