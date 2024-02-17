@@ -3,7 +3,7 @@
     <!--<h1>Number of shoorters {{ numberOfShooters }}</h1>-->
     <!--<div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">-->
     <div id="shootingDisplayContainer">
-        <div v-for="(data, index) in allShooters" :key="index" :class="{ 'shootingDisplayE': data.flags === 'E', 'shootingDisplayP': data.flags === 'P', 'shootingDisplay': true }">
+        <div v-for="(data, index) in allShooters" :key="index" :class="{ 'shootingDisplayE': data.flags === 'E', 'shootingDisplayE': data.flags === 'ES', 'shootingDisplayP': data.flags === 'P', 'shootingDisplay': true }">
             <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags"/>
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
