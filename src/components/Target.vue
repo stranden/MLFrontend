@@ -60,7 +60,7 @@ export default {
                     circle.setAttribute("fill", "rgba(128, 128, 128, 0.75)"); // Grey with 50% opacity for E
                 }
                 if (this.flags === 'P') {
-                    circle.setAttribute("fill", "rgba(190, 28, 28, 0.25)"); // Red with 50% opacity for P
+                    circle.setAttribute("fill", "rgba(190, 28, 28, 0.50)"); // Red with 50% opacity for P
                 }
                 // Append circle to SVG
                 targetSVG.appendChild(circle);

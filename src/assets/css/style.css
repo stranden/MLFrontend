@@ -29,6 +29,7 @@ html {
     column-gap: 0%;
 }
 
+/* Shooters which is eliminated normal */
 .shootingDisplayE::before {
     content: "";
     position: absolute;
@@ -43,6 +44,8 @@ html {
     border-bottom-right-radius: 10px;
 }
 
+
+/* Shooters which is eliminated after shoot off */
 .shootingDisplayES::before {
     content: "";
     position: absolute;
@@ -57,7 +60,24 @@ html {
     border-bottom-right-radius: 10px;
 }
 
+
+/* Shooters to be elminated */
 .shootingDisplayP::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(190, 28, 28, 0.50); /* Red with 50% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Shooters in a shoot off */
+.shootingDisplayT::before {
     content: "";
     position: absolute;
     top: 0;
