@@ -50,7 +50,7 @@ export default {
             // Draw target content using your createTarget function
             createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
 
-            if (this.flags === 'E' || this.flags === 'P' || this.flags === 'ES'){
+            if (this.flags === 'E' || this.flags === 'P' || this.flags === 'ES' || this.flags === 'T'){
                 // Create circle element for overlay
                 const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                 circle.setAttribute("cx", "50%");
@@ -60,7 +60,10 @@ export default {
                     circle.setAttribute("fill", "rgba(128, 128, 128, 0.75)"); // Grey with 50% opacity for E
                 }
                 if (this.flags === 'P') {
-                    circle.setAttribute("fill", "rgba(190, 28, 28, 0.50)"); // Red with 50% opacity for P
+                    circle.setAttribute("fill", "rgba(190, 28, 28, 0.5)"); // Red with 50% opacity for P
+                }
+                if (this.flags === 'T') {
+                    circle.setAttribute("fill", "rgba(0, 143, 0, 0.5)"); // Red with 50% opacity for P
                 }
                 // Append circle to SVG
                 targetSVG.appendChild(circle);
