@@ -50,7 +50,7 @@ export default {
             // Draw target content using your createTarget function
             createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
 
-            if (this.flags !== ''){
+            if (this.flags !== '' || this.flags !== 'W'){
                 // Create circle element for overlay
                 const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                 circle.setAttribute("cx", "50%");
