@@ -50,13 +50,13 @@ export default {
             // Draw target content using your createTarget function
             createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
 
-            if (this.flags === 'E' || this.flags === 'P'){
+            if (this.flags === 'E' || this.flags === 'P' || this.flags === 'ES'){
                 // Create circle element for overlay
                 const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
                 circle.setAttribute("cx", "50%");
                 circle.setAttribute("cy", "50%");
                 circle.setAttribute("r", "50%"); // Circle radius as 50% of container size
-                if (this.flags === 'E') {
+                if (this.flags === 'E' || this.flags === 'ES') {
                     circle.setAttribute("fill", "rgba(128, 128, 128, 0.75)"); // Grey with 50% opacity for E
                 }
                 if (this.flags === 'P') {
