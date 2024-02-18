@@ -118,7 +118,7 @@ export default {
             return array.filter(item => item[key] === value);
         },
         includeAllShooters(array) {
-            return array.filter(item => item['flags'] === '' || item['flags'] === 'E' || item['flags'] === 'P' || item['flags'] === 'W' || item['flags'] === 'T' || item['flags'] === 'ES');
+            return array.filter(item => item['flags'] === '' || item['flags'] === 'E' || item['flags'] === 'P' || item['flags'] === 'W' || item['flags'] === 'T' || item['flags'] === 'ES' || item['flags'] === 'SP');
         },
         svgSource(country) {
             if (country) {
