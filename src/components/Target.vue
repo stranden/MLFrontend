@@ -1,5 +1,5 @@
 <template>
-    <svg class="target" ref="targetSVG"></svg>
+    <svg ref="targetSVG" :class="{ 'targetE': this.flags === 'E', 'targetES': this.flags === 'ES', 'targetT': this.flags === 'T', 'targetP': this.flags === 'P', 'targetSP': this.flags === 'SP', 'target': true }"></svg>
 </template>
 
 <script>
@@ -57,16 +57,16 @@ export default {
                 circle.setAttribute("cy", "50%");
                 circle.setAttribute("r", "50%"); // Circle radius as 50% of container size
                 if (this.flags === 'E' || this.flags === 'ES') {
-                    circle.setAttribute("fill", "rgba(128, 128, 128, 0.75)"); // Grey with 50% opacity for E
+                    circle.setAttribute("fill", "rgba(128, 128, 128, 0.75)"); // Grey with 50% opacity for E and ES
                 }
                 if (this.flags === 'P') {
                     circle.setAttribute("fill", "rgba(190, 28, 28, 0.5)"); // Red with 50% opacity for P
                 }
                 if (this.flags === 'SP') {
-                    circle.setAttribute("fill", "rgba(190, 28, 28, 0.5)"); // Red with 50% opacity for P
+                    circle.setAttribute("fill", "rgba(190, 28, 28, 0.5)"); // Red with 50% opacity for SP
                 }
                 if (this.flags === 'T') {
-                    circle.setAttribute("fill", "rgba(0, 143, 0, 0.5)"); // Red with 50% opacity for P
+                    circle.setAttribute("fill", "rgba(0, 143, 0, 0.5)"); // Green with 50% opacity for T
                 }
                 // Append circle to SVG
                 targetSVG.appendChild(circle);

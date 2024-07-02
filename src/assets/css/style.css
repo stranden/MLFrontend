@@ -44,7 +44,6 @@ html {
     border-bottom-right-radius: 10px;
 }
 
-
 /* Shooters which is eliminated after shoot off */
 .shootingDisplayES::before {
     content: "";
@@ -59,7 +58,6 @@ html {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
-
 
 /* Shooters to be elminated */
 .shootingDisplayP::before {
@@ -114,10 +112,31 @@ html {
     height: 5vmax; /* Adjust size as needed */
     border-radius: 50%; /* Makes it a circle */
     border-color: #cecece;
+    /* border-color: #ffffff; */
     border-style: solid;
-    border-width: 0.2rem;
+    border-width: 0.1rem;
     z-index: 2;
 }
+
+/* .shootingDisplay .targetE {
+    border-color: rgba(255, 255, 255, 0.75);
+}
+
+.shootingDisplay .targetES {
+    border-color: rgba(255, 255, 255, 0.75);
+}
+
+.shootingDisplay .targetP {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.shootingDisplay .targetT {
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.shootingDisplay .targetSP {
+    border-color: rgba(255, 255, 255, 0.5);
+} */
 
 .shootingDisplay .scoreTextTopRightContainer,
 .shootingDisplay .scoreShotValueContainer,
