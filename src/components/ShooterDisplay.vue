@@ -3,7 +3,7 @@
     <!--<h1>Number of shoorters {{ numberOfShooters }}</h1>-->
     <!--<div v-if="numberOfShooters >= 5" id="shootingDisplayContainer">-->
     <div id="shootingDisplayContainer">
-        <div v-for="(data, index) in allShooters" :key="index" :class="{ 'shootingDisplayE': data.flags === 'E', 'shootingDisplayES': data.flags === 'ES', 'shootingDisplayT': data.flags === 'T', 'shootingDisplayP': data.flags === 'P', 'shootingDisplaySP': data.flags === 'SP', 'shootingDisplay': true }">
+        <div v-for="(data, index) in allShooters" :key="index" :class="getShooterClass(data.flags)">
             <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags"/>
             <div class="scoreTextTopRightContainer">
                 <div class="scoreTextTopRight">SCORE</div>
@@ -18,7 +18,7 @@
                 <div class="scoreTotalText">Total</div>
             </div>
             <div class="nameTextContainer">
-                <div class="nameText">{{ data.name }}</div>
+                <div class="nameText">{{ formatName(data.name) }}</div>
             </div>
             <div class="clubTextContainer">
                 <div class="clubText"><img :src="svgSource(data.club)" alt="nation" /><span>{{ data.club }}</span></div>
@@ -92,13 +92,13 @@ export default {
             return this.countNumberOfShooters(this.pushedData, 'flags');
         },
         activeShooters() {
-            return this.removeShootersWithFlags(this.pushedData, 'flags', "E")
+            return this.removeShootersWithFlags(this.pushedData, 'flags', "E");
         },
         allShooters() {
-            return this.includeAllShooters(this.pushedData)
+            return this.includeAllShooters(this.pushedData);
         },
         elimatedShooter() {
-            return this.includeShootersWithFlags(this.pushedData, 'flags', "P")
+            return this.includeShootersWithFlags(this.pushedData, 'flags', "P");
         }
     },
     methods: {
@@ -118,7 +118,7 @@ export default {
             return array.filter(item => item[key] === value);
         },
         includeAllShooters(array) {
-            return array.filter(item => item['flags'] === '' || item['flags'] === 'E' || item['flags'] === 'P' || item['flags'] === 'W' || item['flags'] === 'T' || item['flags'] === 'ES' || item['flags'] === 'SP');
+            return array.filter(item => ['','E','P','W','T','ES','SP'].includes(item.flags));
         },
         svgSource(country) {
             if (country) {
@@ -126,23 +126,73 @@ export default {
             }
         },
         extractShotsForShooter(array) {
-            this.shotsData = [];
+            let shotsData = [];
             if (array) {
                 array.shots.forEach(shot => {
-                    this.shotsData.push({
+                    shotsData.push({
                         x: shot.x,
                         y: shot.y
                     });
                 });
             }
-            console.log('Extracted shots for a lane ', array.fp,' :', this.shotsData);
-            return this.shotsData
+            console.log('Extracted shots for a lane ', array.fp,' :', shotsData);
+            return shotsData;
+        },
+        getShooterClass(flags) {
+            return {
+                'shootingDisplayE': flags === 'E',
+                'shootingDisplayES': flags === 'ES',
+                'shootingDisplayT': flags === 'T',
+                'shootingDisplayP': flags === 'P',
+                'shootingDisplaySP': flags === 'SP',
+                'shootingDisplay': true
+            };
+        },
+        formatName(name) {
+            const nameParts = name.split(' ');
+            const lastName = nameParts[0] || '';
+            const firstName = nameParts[1] || '';
+            const middleNames = nameParts.slice(2);
+
+            // Function to truncate middle names with special handling for Danish letters
+            const truncateMiddleName = (name) => {
+                if (name.startsWith('Aa') || name.startsWith('Ae') || name.startsWith('Oe')) {
+                    return name.substring(0, 2) + '.';
+                } else if (name.length > 0) {
+                    return name[0] + '.';
+                } else {
+                    return '';
+                }
+            };
+
+            // Create truncated first name and middle names initials
+            const truncatedFirstName = firstName.length > 1 ? `${firstName[0]}.` : firstName;
+            const truncatedMiddleNames = middleNames.map(truncateMiddleName).join(' ');
+
+            // Combine the parts
+            const truncatedFullName = `${lastName} ${truncatedFirstName} ${truncatedMiddleNames}`.trim();
+            const fullNameWithTruncatedMiddleNames = `${lastName} ${firstName} ${truncatedMiddleNames}`.trim();
+            const fullName = `${lastName} ${firstName} ${middleNames.join(' ')}`.trim();
+
+            // Check the lengths and return appropriately
+            if (lastName.length >= 18) {
+                return lastName; // Only display last name if it equals or exceeds 18 characters
+            }
+
+            if (fullName.length >= 19 && fullNameWithTruncatedMiddleNames.length <= 19) {
+                return fullNameWithTruncatedMiddleNames;
+            }
+
+            if (fullNameWithTruncatedMiddleNames.length >= 19) {
+                return truncatedFullName;
+            }
+
+            return fullName;
         }
     }
 };
 </script>
-  
+
 <style scoped>
 /* Styles for ShooterDisplay.vue */
 </style>
-  
