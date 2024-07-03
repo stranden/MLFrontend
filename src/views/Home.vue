@@ -38,6 +38,11 @@ export default {
                     id: 4,
                     text: 'Leaderboard',
                     page: '/leaderboard'
+                },
+                {
+                    id: 5,
+                    text: 'ShootingTimer',
+                    page: '/shootingtimer'
                 }
             ]
         }

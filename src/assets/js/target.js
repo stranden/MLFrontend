@@ -132,7 +132,7 @@ function calculateZoomFactor(shots, containerWidth, defaultZoom, maxZoom) {
     }
 
     // Log default zoom factor if there are no shots
-    console.log('Default zoom factor:', defaultZoom);
+    // console.log('Default zoom factor:', defaultZoom);
     return defaultZoom; // If there are no shots, return the default zoom factor
 }
 
@@ -309,8 +309,8 @@ export function drawShots(targetSVG, containerWidth, shots, zoomFactor, targetNa
     if (shots.length > 0) {
         shots.forEach((shot, index) => {
             const divisionFactor = target.layout.rings[0].numbervaluable ? 2 : 3.25;
-            console.log(`Division Factor in drawShots: ${divisionFactor}`)
-            console.log(`Zoom Factor in drawShots: ${zoomFactor}`)
+            // console.log(`Division Factor in drawShots: ${divisionFactor}`)
+            // console.log(`Zoom Factor in drawShots: ${zoomFactor}`)
 
             const fillColor = index === shots.length - 1 ? 'red' : 'green'; // Last shot red, others grey
             const strokeColor = index === shots.length - 1 ? 'red' : 'green'; // Last shot red, others grey
