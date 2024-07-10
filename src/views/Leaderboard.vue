@@ -96,17 +96,22 @@ export default {
         /* Your styles for each leaderboard row */
         display: flex;
         align-items: center;
-        margin-bottom: 8px;
+        justify-content: center;
     }
     
     .leaderboardRankTextContainerUnique {
         /* Your styles for the container of unique rank text */
-        width: 30px; /* Example width */
+        width: 1vw;
+        background-color: rgba(0, 143, 0, 0.5);
+        border-top-left-radius: 50%;
+        border-bottom-left-radius: 50%;
+        height: 2vh;
     }
     
     .leaderboardRankTextContainerTie {
         /* Your styles for the container of tie rank text */
-        width: 30px; /* Example width */
+        width: 1vw;
+        height: 2vh;
     }
     
     .leaderboardRankText {
@@ -120,6 +125,7 @@ export default {
         flex: 1;
         display: flex;
         align-items: center;
+        padding-left: 0.5vw;
     }
     
     .leaderboardShooterFlag img {
@@ -129,5 +135,6 @@ export default {
     
     .leaderboardShooterName {
         /* Your styles for the shooter name */
+        padding-left: 0.25vw;
     }
 </style>
