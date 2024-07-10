@@ -6,6 +6,6 @@
  
 <script>
 export default {
-    name: 'LeaderBoard'
+    name: 'ShootingTimer'
 }
 </script>
