@@ -6,9 +6,7 @@
                     <div v-if="shouldShowRank(index)" class="leaderboardRankText">{{ shooter.rank }}</div>
                 </td>
                 <td class="leaderboardShooterContainer">
-                    <span class="leaderboardShooterFlag">
-                        <img :src="svgSource(shooter.club)" alt="nation" />
-                    </span>
+                    <span class="leaderboardShooterFlag" :class="countryFlag(shooter.club)"></span>
                     <div class="nameTextContainer">
                         <div class="nameText">{{ formatName(shooter.name) }}</div>
                     </div>
@@ -21,6 +19,9 @@
 <script>
 import ApiService from '@/services/ApiService';
 import SocketService from '@/services/SocketService';
+
+import '@/assets/css/flag-icons.css';
+import { convertIocToAlpha2 } from '@/assets/js/country.js';
 
 export default {
     name: 'LeaderBoard',
@@ -57,10 +58,8 @@ export default {
                 console.error('Error fetching update data from API:', error);
             }
         },
-        svgSource(country) {
-            if (country) {
-                return require(`@/assets/img/flags/${country}.svg`);
-            }
+        countryFlag(country) {
+            return `fi fi-${convertIocToAlpha2(country).toLowerCase()} fis`;
         },
         formatName(name) {
             const nameParts = name.split(' ');
@@ -125,7 +124,7 @@ export default {
         position: absolute;
         top: 5vmax;
         left: 2vmax;
-        width: 15vmax; /* Adjusted width to keep it on the left side */
+        width: 10vmax; /* Adjusted width to keep it on the left side */
         height: auto; /* Adjust height to fit content */
         display: flex;
         flex-direction: column;
@@ -151,9 +150,9 @@ export default {
     }
 
     .leaderboardRankTextContainer {
-        background-color: rgba(55, 167, 70, 1);
-        border-top-left-radius: 0.8vmax; /* Rounded left end */
-        border-bottom-left-radius: 0.8vmax; /* Rounded left end */
+        background-color: rgba(55, 167, 70, 0.75);
+        border-top-left-radius: 0.4vmax; /* Rounded left end */
+        border-bottom-left-radius: 0.4vmax; /* Rounded left end */
         text-align: center;
         width: 2vmax; /* Adjust width to fit the design */
         height: 1.5vmax; /* Set height to match the row height */
@@ -174,9 +173,9 @@ export default {
         display: flex;
         align-items: center;
         gap: 0.2vmax; /* Adjust gap to make it smaller */
-        background-color: rgba(55, 167, 70, 1); /* Green background */
-        border-top-right-radius: 0.8vmax; /* Rounded right end */
-        border-bottom-right-radius: 0.8vmax; /* Rounded right end */
+        background-color: rgba(55, 167, 70, 0.75); /* Green background */
+        border-top-right-radius: 0.4vmax; /* Rounded right end */
+        border-bottom-right-radius: 0.4vmax; /* Rounded right end */
         height: 1.5vmax; /* Set height to match the row height */
         padding: 0 0.4vmax; /* Horizontal padding inside the container */
         flex-grow: 1; /* Make it expand to fill available space */
@@ -186,22 +185,27 @@ export default {
         display: flex;
         align-items: center;
         justify-content: center;
-        height: 1.2vmax; /* Set container height to match row height */
-        width: 1.2vmax; /* Set container width to match row height */
-        border-radius: 50%; /* Make it a circle */
+        height: 1.0vmax; /* Set container height to match row height */
+        width: 1.0vmax; /* Set container width to match row height */
+        border-top-left-radius: 0.25vmax; /* Remove top-left border radius */
+        border-bottom-left-radius: 0.25vmax; /* Remove bottom-left border radius */
+        border-top-right-radius: 0.25vmax; /* Rounded top-right corner */
+        border-bottom-right-radius: 0.25vmax; /* Rounded bottom-right corner */
+        border-radius: 1vmax; /* Make the container a circle */
         overflow: hidden; /* Ensure the image doesn't overflow */
     }
 
     .leaderboardShooterFlag img {
-        height: 100%; /* Adjust to fit within the container */
-        width: 100%; /* Adjust to fit within the container */
+        height: 100%; /* Zoom out the flag image */
+        width: 100%; /* Zoom out the flag image */
         object-fit: cover; /* Ensure the image covers the container */
+        object-position: center; /* Center the image in the container */
     }
 
     .nameTextContainer {
         display: flex;
         align-items: center;
-        max-width: 10vmax; /* Shorten the length of the name column */
+        max-width: 7.5vmax; /* Shorten the length of the name column */
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis; /* Add ellipsis if the name is too long */
