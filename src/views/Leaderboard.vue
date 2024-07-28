@@ -2,8 +2,10 @@
     <div id="leaderboardContainer" v-if="sortedShooters.length > 0">
         <table class="leaderboardTable">
             <tr v-for="(shooter, index) in sortedShooters" :key="shooter.startNr">
-                <td class="leaderboardRankTextContainer">
-                    <div v-if="shouldShowRank(index)" class="leaderboardRankText">{{ shooter.rank }}</div>
+                <td v-if="shouldShowRank(index)" class="leaderboardRankTextContainer">
+                    <div class="leaderboardRankText">{{ shooter.rank }}</div>
+                </td>
+                <td v-else class="leaderboardRankTextContainerEmpty">
                 </td>
                 <td class="leaderboardShooterContainer">
                     <span class="leaderboardShooterFlag" :class="countryFlag(shooter.club)"></span>
@@ -151,6 +153,19 @@ export default {
 
     .leaderboardRankTextContainer {
         background-color: rgba(55, 167, 70, 0.75);
+        border-top-left-radius: 0.4vmax; /* Rounded left end */
+        border-bottom-left-radius: 0.4vmax; /* Rounded left end */
+        text-align: center;
+        width: 2vmax; /* Adjust width to fit the design */
+        height: 1.5vmax; /* Set height to match the row height */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 0; /* Remove margin between rank and shooter container */
+    }
+
+    .leaderboardRankTextContainerEmpty {
+        background-color: rgba(255, 255, 255, 0);
         border-top-left-radius: 0.4vmax; /* Rounded left end */
         border-bottom-left-radius: 0.4vmax; /* Rounded left end */
         text-align: center;
