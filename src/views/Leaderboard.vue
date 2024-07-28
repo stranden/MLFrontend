@@ -1,19 +1,22 @@
 <template>
     <div id="leaderboardContainer" v-if="sortedShooters.length > 0">
-        <div v-for="(shooter, index) in sortedShooters" :key="shooter.startNr">
-            <div class="leaderboardRow">
-                <div class="leaderboardRankTextContainerUnique" v-if="shouldShowRank(index)">
-                    <div class="leaderboardRankText">{{ shooter.rank }}</div>
-                </div>
-                <div class="leaderboardRankTextContainerTie" v-else></div>
-                <div class="leaderboardShooterContainer">
-                    <div class="leaderboardShooterFlag">
-                        <img :src="svgSource(shooter.club)" alt="nation" />
-                    </div>
-                    <div class="leaderboardShooterName">{{ shooter.name }}</div>
-                </div>
-            </div>
-        </div>
+        <table class="leaderboardTable">
+            <tbody>
+                <tr v-for="(shooter, index) in sortedShooters" :key="shooter.startNr" :class="{'new-rank': shouldShowRank(index)}">
+                    <td class="leaderboardRankTextContainer">
+                        <div v-if="shouldShowRank(index)" class="leaderboardRankText">{{ shooter.rank }}</div>
+                    </td>
+                    <td class="leaderboardShooterContainer">
+                        <div class="leaderboardShooterFlag">
+                            <img :src="svgSource(shooter.club)" alt="nation" />
+                        </div>
+                        <div class="nameTextContainer">
+                            <div class="nameText">{{ formatName(shooter.name) }}</div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </template>
 
@@ -30,7 +33,6 @@ export default {
     },
     computed: {
         sortedShooters() {
-            // Filter out shooters with rank 0 and sort by rank
             return this.fetchedData
                 .filter(shooter => shooter.rank > 0)
                 .sort((a, b) => a.rank - b.rank);
@@ -38,7 +40,6 @@ export default {
     },
     methods: {
         shouldShowRank(index) {
-            // Show the rank only if it is the first occurrence in the sortedShooters array
             if (index === 0) return true;
             return this.sortedShooters[index].rank !== this.sortedShooters[index - 1].rank;
         },
@@ -60,6 +61,47 @@ export default {
             if (country) {
                 return require(`@/assets/img/flags/${country}.svg`);
             }
+        },
+        formatName(name) {
+            const nameParts = name.split(' ');
+            const lastName = nameParts[0] || '';
+            const firstName = nameParts[1] || '';
+            const middleNames = nameParts.slice(2);
+
+            // Function to truncate middle names with special handling for Danish letters
+            const truncateMiddleName = (name) => {
+                if (name.startsWith('Aa') || name.startsWith('Ae') || name.startsWith('Oe')) {
+                    return name.substring(0, 2) + '.';
+                } else if (name.length > 0) {
+                    return name[0] + '.';
+                } else {
+                    return '';
+                }
+            };
+
+            // Create truncated first name and middle names initials
+            const truncatedFirstName = firstName.length > 1 ? `${firstName[0]}.` : firstName;
+            const truncatedMiddleNames = middleNames.map(truncateMiddleName).join(' ');
+
+            // Combine the parts
+            const truncatedFullName = `${lastName} ${truncatedFirstName} ${truncatedMiddleNames}`.trim();
+            const fullNameWithTruncatedMiddleNames = `${lastName} ${firstName} ${truncatedMiddleNames}`.trim();
+            const fullName = `${lastName} ${firstName} ${middleNames.join(' ')}`.trim();
+
+            // Check the lengths and return appropriately
+            if (lastName.length >= 18) {
+                return lastName; // Only display last name if it equals or exceeds 18 characters
+            }
+
+            if (fullName.length >= 19 && fullNameWithTruncatedMiddleNames.length <= 19) {
+                return fullNameWithTruncatedMiddleNames;
+            }
+
+            if (fullNameWithTruncatedMiddleNames.length >= 19) {
+                return truncatedFullName;
+            }
+
+            return fullName;
         }
     },
     async created() {
@@ -79,62 +121,93 @@ export default {
 </script>
 
 <style scoped>
-    /* Styles for Leaderboard.vue */
     #leaderboardContainer {
         position: absolute;
-        top: 5vmax; /* Adjusted to be at the top with 5vmax spacing */
-        left: 2vmax; /* Adjusted to stick to the left side */
-        width: calc(100vw - 4vmax); /* Adjust width dynamically */
-        height: calc(100vh - 2 * 5vmax); /* Adjust height dynamically */
+        top: 5vmax;
+        left: 2vmax;
+        width: 25vmax; /* Adjusted width to keep it on the left side */
+        height: auto; /* Adjust height to fit content */
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        gap: 2%;
+        justify-content: flex-start;
     }
-    
-    .leaderboardRow {
-        /* Your styles for each leaderboard row */
+
+    .leaderboardTable {
+        width: 100%;
+        border-collapse: separate; /* Use separate borders */
+        border-spacing: 0.5vmax 0; /* Add spacing between rows */
+    }
+
+    .leaderboardTable tr {
         display: flex;
         align-items: center;
-        justify-content: center;
+        height: 2vmax; /* Adjust row height */
+        padding: 0.25vmax 0; /* Add padding for space between rows */
     }
-    
-    .leaderboardRankTextContainerUnique {
-        /* Your styles for the container of unique rank text */
-        width: 1vw;
+
+    .leaderboardTable td {
+        padding: 0; /* Remove padding */
+        text-align: left;
+    }
+
+    .leaderboardRankTextContainer {
         background-color: rgba(0, 143, 0, 0.5);
-        border-top-left-radius: 50%;
-        border-bottom-left-radius: 50%;
-        height: 2vh;
-    }
-    
-    .leaderboardRankTextContainerTie {
-        /* Your styles for the container of tie rank text */
-        width: 1vw;
-        height: 2vh;
-    }
-    
-    .leaderboardRankText {
-        /* Your styles for the rank text */
-        font-weight: bold;
+        border-top-left-radius: 1vmax; /* Rounded left end */
+        border-bottom-left-radius: 1vmax; /* Rounded left end */
         text-align: center;
-    }
-    
-    .leaderboardShooterContainer {
-        /* Your styles for the shooter container */
-        flex: 1;
+        width: 2.5vmax; /* Adjust width to fit the design */
+        height: 2vmax; /* Set height to match the row height */
         display: flex;
         align-items: center;
-        padding-left: 0.5vw;
+        justify-content: center;
+        margin-right: 0; /* Remove margin between rank and shooter container */
     }
-    
+
+    .leaderboardRankText {
+        font-weight: bold;
+        color: white;
+        font-size: 0.6vmax; /* Adjust font size as necessary */
+        line-height: 2vmax; /* Ensures the text is centered vertically */
+    }
+
+    .leaderboardShooterContainer {
+        display: flex;
+        align-items: center;
+        gap: 0.3vmax; /* Adjust gap to make it smaller */
+        background-color: rgba(0, 143, 0, 0.5); /* Green background */
+        border-top-right-radius: 1vmax; /* Rounded right end */
+        border-bottom-right-radius: 1vmax; /* Rounded right end */
+        height: 2vmax; /* Set height to match the row height */
+        padding: 0 0.5vmax; /* Horizontal padding inside the container */
+        flex-grow: 1; /* Make it expand to fill available space */
+    }
+
     .leaderboardShooterFlag img {
-        height: 1vh;
-        border-radius: 25%;
+        height: 1.5vmax; /* Adjust flag size */
+        width: 1.5vmax; /* Ensure flags are equally sized */
+        border-radius: 50%; /* Make the flags perfectly round */
     }
-    
-    .leaderboardShooterName {
-        /* Your styles for the shooter name */
-        padding-left: 0.25vw;
+
+    .nameTextContainer {
+        display: flex;
+        align-items: center;
+        max-width: 15vmax; /* Shorten the length of the name column */
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis; /* Add ellipsis if the name is too long */
+    }
+
+    .nameText {
+        font-size: 0.8vmax; /* Adjust font size */
+        color: white; /* Changed text color to white for better contrast */
+    }
+
+    .new-rank {
+        animation: highlight 1s ease-in-out;
+    }
+
+    @keyframes highlight {
+        0% { background-color: yellow; }
+        100% { background-color: transparent; }
     }
 </style>
