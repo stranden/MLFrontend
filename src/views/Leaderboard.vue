@@ -1,21 +1,19 @@
 <template>
     <div id="leaderboardContainer" v-if="sortedShooters.length > 0">
         <table class="leaderboardTable">
-            <tbody>
-                <tr v-for="(shooter, index) in sortedShooters" :key="shooter.startNr" :class="{'new-rank': shouldShowRank(index)}">
-                    <td class="leaderboardRankTextContainer">
-                        <div v-if="shouldShowRank(index)" class="leaderboardRankText">{{ shooter.rank }}</div>
-                    </td>
-                    <td class="leaderboardShooterContainer">
-                        <div class="leaderboardShooterFlag">
-                            <img :src="svgSource(shooter.club)" alt="nation" />
-                        </div>
-                        <div class="nameTextContainer">
-                            <div class="nameText">{{ formatName(shooter.name) }}</div>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
+            <tr v-for="(shooter, index) in sortedShooters" :key="shooter.startNr">
+                <td class="leaderboardRankTextContainer">
+                    <div v-if="shouldShowRank(index)" class="leaderboardRankText">{{ shooter.rank }}</div>
+                </td>
+                <td class="leaderboardShooterContainer">
+                    <span class="leaderboardShooterFlag">
+                        <img :src="svgSource(shooter.club)" alt="nation" />
+                    </span>
+                    <div class="nameTextContainer">
+                        <div class="nameText">{{ formatName(shooter.name) }}</div>
+                    </div>
+                </td>
+            </tr>
         </table>
     </div>
 </template>
@@ -33,6 +31,7 @@ export default {
     },
     computed: {
         sortedShooters() {
+            // Filter out shooters with rank 0 and sort by rank
             return this.fetchedData
                 .filter(shooter => shooter.rank > 0)
                 .sort((a, b) => a.rank - b.rank);
@@ -40,6 +39,7 @@ export default {
     },
     methods: {
         shouldShowRank(index) {
+            // Show the rank only if it is the first occurrence in the sortedShooters array
             if (index === 0) return true;
             return this.sortedShooters[index].rank !== this.sortedShooters[index - 1].rank;
         },
@@ -125,7 +125,7 @@ export default {
         position: absolute;
         top: 5vmax;
         left: 2vmax;
-        width: 25vmax; /* Adjusted width to keep it on the left side */
+        width: 15vmax; /* Adjusted width to keep it on the left side */
         height: auto; /* Adjust height to fit content */
         display: flex;
         flex-direction: column;
@@ -135,14 +135,14 @@ export default {
     .leaderboardTable {
         width: 100%;
         border-collapse: separate; /* Use separate borders */
-        border-spacing: 0.5vmax 0; /* Add spacing between rows */
+        border-spacing: 0.4vmax 0; /* Add spacing between rows */
     }
 
     .leaderboardTable tr {
         display: flex;
         align-items: center;
-        height: 2vmax; /* Adjust row height */
-        padding: 0.25vmax 0; /* Add padding for space between rows */
+        height: 1.5vmax; /* Adjust row height */
+        padding: 0.2vmax 0; /* Add padding for space between rows */
     }
 
     .leaderboardTable td {
@@ -151,12 +151,12 @@ export default {
     }
 
     .leaderboardRankTextContainer {
-        background-color: rgba(0, 143, 0, 0.5);
-        border-top-left-radius: 1vmax; /* Rounded left end */
-        border-bottom-left-radius: 1vmax; /* Rounded left end */
+        background-color: rgba(55, 167, 70, 1);
+        border-top-left-radius: 0.8vmax; /* Rounded left end */
+        border-bottom-left-radius: 0.8vmax; /* Rounded left end */
         text-align: center;
-        width: 2.5vmax; /* Adjust width to fit the design */
-        height: 2vmax; /* Set height to match the row height */
+        width: 2vmax; /* Adjust width to fit the design */
+        height: 1.5vmax; /* Set height to match the row height */
         display: flex;
         align-items: center;
         justify-content: center;
@@ -166,39 +166,49 @@ export default {
     .leaderboardRankText {
         font-weight: bold;
         color: white;
-        font-size: 0.6vmax; /* Adjust font size as necessary */
-        line-height: 2vmax; /* Ensures the text is centered vertically */
+        font-size: 0.8vmax; /* Increased font size slightly */
+        line-height: 1.5vmax; /* Ensures the text is centered vertically */
     }
 
     .leaderboardShooterContainer {
         display: flex;
         align-items: center;
-        gap: 0.3vmax; /* Adjust gap to make it smaller */
-        background-color: rgba(0, 143, 0, 0.5); /* Green background */
-        border-top-right-radius: 1vmax; /* Rounded right end */
-        border-bottom-right-radius: 1vmax; /* Rounded right end */
-        height: 2vmax; /* Set height to match the row height */
-        padding: 0 0.5vmax; /* Horizontal padding inside the container */
+        gap: 0.2vmax; /* Adjust gap to make it smaller */
+        background-color: rgba(55, 167, 70, 1); /* Green background */
+        border-top-right-radius: 0.8vmax; /* Rounded right end */
+        border-bottom-right-radius: 0.8vmax; /* Rounded right end */
+        height: 1.5vmax; /* Set height to match the row height */
+        padding: 0 0.4vmax; /* Horizontal padding inside the container */
         flex-grow: 1; /* Make it expand to fill available space */
     }
 
+    .leaderboardShooterFlag {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 1.2vmax; /* Set container height to match row height */
+        width: 1.2vmax; /* Set container width to match row height */
+        border-radius: 50%; /* Make it a circle */
+        overflow: hidden; /* Ensure the image doesn't overflow */
+    }
+
     .leaderboardShooterFlag img {
-        height: 1.5vmax; /* Adjust flag size */
-        width: 1.5vmax; /* Ensure flags are equally sized */
-        border-radius: 50%; /* Make the flags perfectly round */
+        height: 100%; /* Adjust to fit within the container */
+        width: 100%; /* Adjust to fit within the container */
+        object-fit: cover; /* Ensure the image covers the container */
     }
 
     .nameTextContainer {
         display: flex;
         align-items: center;
-        max-width: 15vmax; /* Shorten the length of the name column */
+        max-width: 10vmax; /* Shorten the length of the name column */
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis; /* Add ellipsis if the name is too long */
     }
 
     .nameText {
-        font-size: 0.8vmax; /* Adjust font size */
+        font-size: 0.7vmax; /* Adjust font size */
         color: white; /* Changed text color to white for better contrast */
     }
 
