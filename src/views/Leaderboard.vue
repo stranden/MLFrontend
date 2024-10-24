@@ -3,12 +3,13 @@
         <table class="leaderboardTable">
             <tr v-for="(shooter, index) in sortedShooters" :key="shooter.startNr">
                 <td v-if="shouldShowRank(index)" class="leaderboardRankTextContainer">
-                    <div class="leaderboardRankText">{{ shooter.rank }}</div>
+                    <div :class="{ 'leaderboardRankTextGold': shooter.rank === 1, 'leaderboardRankTextSilver': shooter.rank === 2, 'leaderboardRankTextBronze': shooter.rank === 3, 'leaderboardRankTextDefault': true }">{{ shooter.rank }}</div>
                 </td>
-                <td v-else class="leaderboardRankTextContainerEmpty">
+                <!--<td v-else class="leaderboardRankTextContainerEmpty">-->
+                <td v-else class="leaderboardRankTextContainer">
                 </td>
                 <td class="leaderboardShooterContainer">
-                    <span class="leaderboardShooterFlag" :class="countryFlag(shooter.club)"></span>
+                    <!--<span class="leaderboardShooterFlag" :class="countryFlag(shooter.club)"></span>-->
                     <div class="nameTextContainer">
                         <div class="nameText">{{ formatName(shooter.name) }}</div>
                     </div>
@@ -177,11 +178,28 @@ export default {
         margin-right: 0; /* Remove margin between rank and shooter container */
     }
 
-    .leaderboardRankText {
+    .leaderboardRankTextDefault {
+        background-color: rgba(255, 255, 255, 0);
+        border-radius: 50%; /* Rounded left end */
         font-weight: bold;
         color: white;
         font-size: 0.8vmax; /* Increased font size slightly */
         line-height: 1.5vmax; /* Ensures the text is centered vertically */
+    }
+
+    .leaderboardRankTextGold {
+        font-weight: bold;
+        color: gold;
+    }
+
+    .leaderboardRankTextSilver {
+        font-weight: bold;
+        color: silver;
+    }
+
+    .leaderboardRankTextBronze {
+        font-weight: bold;
+        color: brown;
     }
 
     .leaderboardShooterContainer {
