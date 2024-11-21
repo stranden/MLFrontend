@@ -1,31 +1,52 @@
 <template>
     <div>
-      <ScoreBoardDisplay :participants="finalParticipants" />
+      <ScoreBoardDisplay :pushedData="fetchedData" />
     </div>
   </template>
+
+<script>
+import ScoreBoardDisplay from '@/components/ScoreBoardDisplay.vue';
+import ApiService from '@/services/ApiService';
+import SocketService from '@/services/SocketService';
+
   
-  <script>
-  import ScoreBoardDisplay from '@/components/ScoreBoardDisplay.vue';
-  
-  export default {
-    name: 'ScoreBoard',
-    data() {
-      return {
-        finalParticipants: [
-          { name: "John Doe", nation: "USA", score: 98 },
-          { name: "Emily Clarke", nation: "UK", score: 96 },
-          { name: "Carlos Diaz", nation: "Spain", score: 94 },
-          { name: "Wei Zhang", nation: "China", score: 93 },
-          { name: "Anna Ivanova", nation: "Russia", score: 92 },
-          { name: "Lucia Rossi", nation: "Italy", score: 91 },
-          { name: "Marta Pereira", nation: "Brazil", score: 89 },
-          { name: "David Kim", nation: "South Korea", score: 88 },
-        ],
-      };
+export default {
+  name: 'ScoreBoard',
+  components: {
+      ScoreBoardDisplay,
+  },
+  data() {
+        return {
+            fetchedData: []
+        };
     },
-    components: {
-        ScoreBoardDisplay,
+    async created() {
+        try {
+            // Fetch initial data from the API
+            const responseData = await ApiService.fetchData();
+            this.fetchedData = responseData.result;
+            console.log('Fetched initial data from API:', this.fetchedData);
+
+            // Listen for WebSocket events to update data
+            SocketService.listen('update', () => {
+                this.fetchDataAndUpdate();
+            });
+        } catch (error) {
+            console.error('Error fetching initial data from API:', error);
+        }
     },
-  };
-  </script>
+    methods: {
+        // Fetch data from API and update component data
+        async fetchDataAndUpdate() {
+            try {
+                const responseData = await ApiService.fetchData();
+                this.fetchedData = responseData.result;
+                console.log('Fetched update data from API:', this.fetchedData);
+            } catch (error) {
+                console.error('Error fetching update data from API:', error);
+            }
+        }
+    }
+};
+</script>
   
