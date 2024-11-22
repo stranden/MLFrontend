@@ -72,7 +72,7 @@ export default {
 /* Scoreboard styling */
 .scoreboard {
   text-align: center;
-  background-color: white; /* White background to match the uploaded example */
+  background-color: rgba(255, 255, 255, 0.85); /* White background to match the uploaded example */
   padding: 2vh 2vw;
   border-radius: 1rem; /* Rounded edges for modern style */
   box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.15); /* Light shadow for subtle depth */
