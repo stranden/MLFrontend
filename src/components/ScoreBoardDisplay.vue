@@ -15,8 +15,7 @@
                     <div class="total-score-container">
                         <div class="total-score">{{ participant.totalScore }}</div>
                     </div>
-                    <div class="difference">
-                        <span v-html="scoreDifference(index, sortedParticipants)"></span>
+                    <div class="difference" v-html="scoreDifference(index, sortedParticipants)">
                     </div>
                 </div>
             </div>
@@ -47,26 +46,43 @@ export default {
             const participant = participants[index];
             const flags = participant.flags || []; // Default to empty array if no flags
 
+            // Check if there's only one shooter left after filtering out E or ES shooters
+            const remainingShooters = participants.filter(
+                (p) => !(p.flags || []).includes("E") && !(p.flags || []).includes("ES")
+            );
+
+            if (remainingShooters.length === 1 && remainingShooters[0] === participant) {
+                return `<span class="gold-medal">
+                            <span class="medal-circle gold">1</span>
+                            GOLD
+                        </span>`;
+            }
+
             // Special flag handling for E and ES
             if (flags.includes("E") || flags.includes("ES")) {
                 const rank = participant.rank;
-                if (rank === 3) {
-                    return "BRONZE";
-                } else if (rank === 2) {
-                    return "SILVER";
-                } else if (rank === 1) {
-                    return "GOLD";
+                if (rank === 2) {
+                    return `<span class="silver-medal">
+                                <span class="medal-circle silver">2</span>
+                                SILVER
+                            </span>`;
+                } else if (rank === 3) {
+                    return `<span class="bronze-medal">
+                                <span class="medal-circle bronze">3</span>
+                                BRONZE
+                            </span>`;
                 } else if (rank >= 4 && rank <= 8) {
-                    return `${rank}<sup>TH</sup> PLACE` // Add "TH" for 4th to 8th place
+                    // For ranks 4th to 8th, display the rank with "PLACE"
+                    return `${rank}<sup>TH</sup> PLACE`;
                 } else {
-                    return `Final Position: ${rank}`; // Default message for other ranks
+                    return ""; // No difference for other ranks
                 }
             }
-            
+
             // Special flag handling
             if (flags.includes("T")) {
                 return "In Shoot-Off";
-            } 
+            }
 
             // Default case: calculate score difference
             if (index === 0) {
@@ -74,7 +90,13 @@ export default {
             }
             const currentScore = parseFloat(participant.totalScore);
             const aboveScore = parseFloat(participants[index - 1].totalScore);
-            return `-${(aboveScore - currentScore).toFixed(1)}`;
+
+            // If scores are equal, do not show a difference
+            if (currentScore === aboveScore) {
+                return ""; // Return empty string for participants with equal scores
+            }
+
+            return `${(aboveScore - currentScore).toFixed(1)}`;
         },
         countryFlag(country) {
             return `fi fi-${convertIocToAlpha2(country).toLowerCase()} fi-rounded`;
@@ -90,7 +112,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: transparent; /* Transparent to allow background visuals */
+    background-color: black; /* Transparent to allow background visuals */
 }
 
 /* Scoreboard styling */
@@ -217,6 +239,91 @@ export default {
     font-size: 1.1rem; /* Increased font size for better visibility */
     font-weight: bold;
     color: #888; /* Subtle gray for differences */
-    text-align: center;
+}
+
+/* Medal styling */
+::v-deep(.gold-medal) {
+    color: #FFD700; /* Gold color */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+::v-deep(.silver-medal) {
+    color: #C0C0C0; /* Silver color */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+::v-deep(.bronze-medal) {
+    color: #CD7F32; /* Bronze color */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/* Medal icon as circle */
+::v-deep(.medal-circle) {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+::v-deep(.medal-circle.gold) {
+    background-color: #FFD700;
+}
+
+::v-deep(.medal-circle.silver) {
+    background-color: #C0C0C0;
+}
+
+::v-deep(.medal-circle.bronze) {
+    background-color: #CD7F32;
+}
+/*
+::v-deep(.medal-circle) {
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 500;
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  color: white;
+  text-align: center;
+  line-height: 2.875rem;
+  vertical-align: middle;
+  position: relative;
+  border-width: 0.125rem;
+  border-style: solid;
+  z-index: 1;
+}*/
+
+/* Gold medal circle */
+::v-deep(.medal-circle.gold) {
+  box-shadow: inset 0 0 0 darken(#f9ad0e, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem */
+  border-color: lighten(adjust-hue(#f9ad0e, 10), 10%);
+  text-shadow: 0 0 0.25rem darken(#f9ad0e, 20%); /* 4px = 0.25rem */
+  background: linear-gradient(to bottom right, #f9ad0e 50%, darken(#f9ad0e, 5%) 50%);
+}
+
+/* Silver medal circle */
+::v-deep(.medal-circle.silver) {
+  box-shadow: inset 0 0 0 darken(#d1d7da, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem */
+  border-color: lighten(adjust-hue(#d1d7da, 10), 10%);
+  text-shadow: 0 0 0.25rem darken(#d1d7da, 20%); /* 4px = 0.25rem */
+  background: linear-gradient(to bottom right, #d1d7da 50%, darken(#d1d7da, 5%) 50%);
+}
+
+/* Bronze medal circle */
+::v-deep(.medal-circle.bronze) {
+  box-shadow: inset 0 0 0 darken(#df7e08, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem */
+  border-color: lighten(adjust-hue(#df7e08, 10), 10%);
+  text-shadow: 0 0 0.25rem darken(#df7e08, 20%); /* 4px = 0.25rem */
+  background: linear-gradient(to bottom right, #df7e08 50%, darken(#df7e08, 5%) 50%);
 }
 </style>
