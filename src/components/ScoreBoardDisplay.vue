@@ -112,7 +112,7 @@ export default {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: black; /* Transparent to allow background visuals */
+    background-color: transparent; /* Transparent to allow background visuals */
 }
 
 /* Scoreboard styling */
