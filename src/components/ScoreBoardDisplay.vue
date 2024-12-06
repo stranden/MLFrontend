@@ -15,7 +15,9 @@
                     <div class="total-score-container">
                         <div class="total-score">{{ participant.totalScore }}</div>
                     </div>
-                    <div class="difference" v-html="scoreDifference(index, sortedParticipants)">
+                    <div class="difference">
+                        <div class="rank-info" v-html="rankSymbol(index, sortedParticipants)"></div>
+                        <div class="other-info" v-html="rankText(index, sortedParticipants)"></div>
                     </div>
                 </div>
             </div>
@@ -41,62 +43,59 @@ export default {
             return [...this.pushedData].sort((a, b) => parseFloat(b.totalScore) - parseFloat(a.totalScore));
         },
     },
-    methods: {
-        scoreDifference(index, participants) {
+    methods: {rankSymbol(index, participants) {
             const participant = participants[index];
-            const flags = participant.flags || []; // Default to empty array if no flags
-
-            // Check if there's only one shooter left after filtering out E or ES shooters
+            const flags = participant.flags || [];
             const remainingShooters = participants.filter(
                 (p) => !(p.flags || []).includes("E") && !(p.flags || []).includes("ES")
             );
 
             if (remainingShooters.length === 1 && remainingShooters[0] === participant) {
-                return `<span class="gold-medal">
-                            <span class="medal-circle gold">1</span>
-                            GOLD
-                        </span>`;
+                return `<span class="medal-circle gold">1</span>`;
             }
 
-            // Special flag handling for E and ES
             if (flags.includes("E") || flags.includes("ES")) {
-                const rank = participant.rank;
-                if (rank === 2) {
-                    return `<span class="silver-medal">
-                                <span class="medal-circle silver">2</span>
-                                SILVER
-                            </span>`;
-                } else if (rank === 3) {
-                    return `<span class="bronze-medal">
-                                <span class="medal-circle bronze">3</span>
-                                BRONZE
-                            </span>`;
-                } else if (rank >= 4 && rank <= 8) {
-                    // For ranks 4th to 8th, display the rank with "PLACE"
-                    return `${rank}<sup>TH</sup> PLACE`;
-                } else {
-                    return ""; // No difference for other ranks
+                if (participant.rank === 2) {
+                    return `<span class="medal-circle silver">2</span>`;
+                } else if (participant.rank === 3) {
+                    return `<span class="medal-circle bronze">3</span>`;
                 }
+                return `<span class="medal-circle place">${participant.rank}</span>`;
+            }
+            return "";
+        },
+        rankText(index, participants) {
+            const participant = participants[index];
+            const flags = participant.flags || [];
+            const remainingShooters = participants.filter(
+                (p) => !(p.flags || []).includes("E") && !(p.flags || []).includes("ES")
+            );
+
+            if (remainingShooters.length === 1 && remainingShooters[0] === participant) {
+                return `<span class="gold-medal">GOLD</span>`;
             }
 
-            // Special flag handling
-            if (flags.includes("T")) {
-                return "In Shoot-Off";
+            if (flags.includes("E") || flags.includes("ES")) {
+                if (participant.rank === 2) {
+                    return `<span class="silver-medal">SILVER</span>`;
+                } else if (participant.rank === 3) {
+                    return `<span class="bronze-medal">BRONZE</span>`;
+                }
+                return `<span>PLACE</span>`;
             }
 
-            // Default case: calculate score difference
             if (index === 0) {
-                return ""; // No difference for the top participant
+                return "";
             }
+
             const currentScore = parseFloat(participant.totalScore);
             const aboveScore = parseFloat(participants[index - 1].totalScore);
 
-            // If scores are equal, do not show a difference
             if (currentScore === aboveScore) {
-                return ""; // Return empty string for participants with equal scores
+                return "";
             }
 
-            return `${(aboveScore - currentScore).toFixed(1)}`;
+            return `<span class="difference-text">${(aboveScore - currentScore).toFixed(1)}</span>`;
         },
         countryFlag(country) {
             return `fi fi-${convertIocToAlpha2(country).toLowerCase()} fi-rounded`;
@@ -234,11 +233,31 @@ export default {
     border-bottom-right-radius: 0.5rem; /* Slightly rounded corners */
 }
 
-/* Difference */
+/* Difference between ranks */
 .difference {
-    font-size: 1.1rem; /* Increased font size for better visibility */
+    display: inline-flex;
+    justify-items: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rank-info {
     font-weight: bold;
-    color: #888; /* Subtle gray for differences */
+    color: #888;
+    justify-items: right;
+    align-items: right;
+}
+
+.other-info {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #888;
+}
+
+::v-deep(.difference-text) {
+    text-align: right;
+    justify-content: right;
+    align-items: right;
 }
 
 /* Medal styling */
@@ -285,45 +304,33 @@ export default {
 ::v-deep(.medal-circle.bronze) {
     background-color: #CD7F32;
 }
-/*
-::v-deep(.medal-circle) {
-  font-family: 'Roboto', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 500;
-  width: 3.5rem;
-  height: 3.5rem;
-  border-radius: 50%;
-  color: white;
-  text-align: center;
-  line-height: 2.875rem;
-  vertical-align: middle;
-  position: relative;
-  border-width: 0.125rem;
-  border-style: solid;
-  z-index: 1;
-}*/
 
-/* Gold medal circle */
+::v-deep(.medal-circle.place) {
+    background-color: #888;
+}
+
+/*
+/* Gold medal circle 
 ::v-deep(.medal-circle.gold) {
-  box-shadow: inset 0 0 0 darken(#f9ad0e, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem */
+  box-shadow: inset 0 0 0 darken(#f9ad0e, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem
   border-color: lighten(adjust-hue(#f9ad0e, 10), 10%);
-  text-shadow: 0 0 0.25rem darken(#f9ad0e, 20%); /* 4px = 0.25rem */
+  text-shadow: 0 0 0.25rem darken(#f9ad0e, 20%); /* 4px = 0.25rem
   background: linear-gradient(to bottom right, #f9ad0e 50%, darken(#f9ad0e, 5%) 50%);
 }
 
-/* Silver medal circle */
+/* Silver medal circle
 ::v-deep(.medal-circle.silver) {
-  box-shadow: inset 0 0 0 darken(#d1d7da, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem */
+  box-shadow: inset 0 0 0 darken(#d1d7da, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem 
   border-color: lighten(adjust-hue(#d1d7da, 10), 10%);
-  text-shadow: 0 0 0.25rem darken(#d1d7da, 20%); /* 4px = 0.25rem */
+  text-shadow: 0 0 0.25rem darken(#d1d7da, 20%); /* 4px = 0.25rem 
   background: linear-gradient(to bottom right, #d1d7da 50%, darken(#d1d7da, 5%) 50%);
 }
 
-/* Bronze medal circle */
+/* Bronze medal circle
 ::v-deep(.medal-circle.bronze) {
-  box-shadow: inset 0 0 0 darken(#df7e08, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem */
+  box-shadow: inset 0 0 0 darken(#df7e08, 15%), 0.125rem 0.125rem 0 rgba(0, 0, 0, 0.08); /* 2px = 0.125rem
   border-color: lighten(adjust-hue(#df7e08, 10), 10%);
-  text-shadow: 0 0 0.25rem darken(#df7e08, 20%); /* 4px = 0.25rem */
+  text-shadow: 0 0 0.25rem darken(#df7e08, 20%); /* 4px = 0.25rem
   background: linear-gradient(to bottom right, #df7e08 50%, darken(#df7e08, 5%) 50%);
-}
+}*/
 </style>
