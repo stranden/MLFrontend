@@ -15,9 +15,7 @@
                     <div class="total-score-container">
                         <div class="total-score">{{ participant.totalScore }}</div>
                     </div>
-                    <div class="difference">
-                        <div class="rank-info" v-html="rankSymbol(index, sortedParticipants)"></div>
-                        <div class="other-info" v-html="rankText(index, sortedParticipants)"></div>
+                    <div class="info-container" v-html="notesContent(index, sortedParticipants)">
                     </div>
                 </div>
             </div>
@@ -43,49 +41,65 @@ export default {
             return [...this.pushedData].sort((a, b) => parseFloat(b.totalScore) - parseFloat(a.totalScore));
         },
     },
-    methods: {rankSymbol(index, participants) {
+    methods: {
+        notesContent(index, participants) {
             const participant = participants[index];
             const flags = participant.flags || [];
             const remainingShooters = participants.filter(
-                (p) => !(p.flags || []).includes("E") && !(p.flags || []).includes("ES")
+                (p) => !(p.flags || []).includes("E") && !(p.flags || []).includes("ES") && !(p.flags || []).includes("P")
             );
 
             if (remainingShooters.length === 1 && remainingShooters[0] === participant) {
-                return `<span class="medal-circle gold">1</span>`;
+                return `<div class="info">
+                            <div class="rank-info">
+                                <span class="medal-circle gold">1</span>
+                            </div>
+                            <div class="other-info">
+                                <span class="final-text gold">GOLD</span>
+                            </div>
+                        </div>`;
             }
 
-            if (flags.includes("E") || flags.includes("ES")) {
+            if (flags.includes("E") || flags.includes("ES") || flags.includes("P")) {
                 if (participant.rank === 2) {
-                    return `<span class="medal-circle silver">2</span>`;
+                    return `<div class="info">
+                                <div class="rank-info">
+                                    <span class="medal-circle silver">2</span>
+                                </div>
+                                <div class="other-info">
+                                    <span class="final-text silver">SILVER</span>
+                                </div>
+                            </div>`;
                 } else if (participant.rank === 3) {
-                    return `<span class="medal-circle bronze">3</span>`;
+                    return `<div class="info">
+                                <div class="rank-info">
+                                    <span class="medal-circle bronze">3</span>
+                                </div>
+                                <div class="other-info">
+                                    <span class="final-text bronze">BRONZE</span>
+                                </div>
+                            </div>`;
                 }
-                return `<span class="medal-circle place">${participant.rank}</span>`;
-            }
-            return "";
-        },
-        rankText(index, participants) {
-            const participant = participants[index];
-            const flags = participant.flags || [];
-            const remainingShooters = participants.filter(
-                (p) => !(p.flags || []).includes("E") && !(p.flags || []).includes("ES")
-            );
-
-            if (remainingShooters.length === 1 && remainingShooters[0] === participant) {
-                return `<span class="gold-medal">GOLD</span>`;
+                return `<div class="info">
+                            <div class="rank-info">
+                                <span class="medal-circle place">${participant.rank}</span>
+                            </div>
+                            <div class="other-info">
+                                <span class="final-text place">PLACE</span>
+                            </div>
+                        </div>`;
             }
 
-            if (flags.includes("E") || flags.includes("ES")) {
-                if (participant.rank === 2) {
-                    return `<span class="silver-medal">SILVER</span>`;
-                } else if (participant.rank === 3) {
-                    return `<span class="bronze-medal">BRONZE</span>`;
-                }
-                return `<span>PLACE</span>`;
+            if (flags.includes("T")) {
+                return `<div class="info">
+                            <div class="other-info">
+                                <span class="difference-text">SHOOT OFF</span>
+                            </div>
+                        </div>`;
             }
 
             if (index === 0) {
-                return "";
+                return `<div class="hidden"></div>`;
             }
 
             const currentScore = parseFloat(participant.totalScore);
@@ -95,7 +109,11 @@ export default {
                 return "";
             }
 
-            return `<span class="difference-text">${(aboveScore - currentScore).toFixed(1)}</span>`;
+            return `<div class="info">
+                        <div class="other-info">
+                            <span class="difference-text">${(aboveScore - currentScore).toFixed(1)}</span>
+                        </div>
+                    </div>`;
         },
         countryFlag(country) {
             return `fi fi-${convertIocToAlpha2(country).toLowerCase()} fi-rounded`;
@@ -227,59 +245,71 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-top-left-radius: 0.5rem; /* Slightly rounded corners */
-    border-top-right-radius: 0.5rem; /* Slightly rounded corners */
-    border-bottom-left-radius: 0.5rem; /* Slightly rounded corners */
-    border-bottom-right-radius: 0.5rem; /* Slightly rounded corners */
+    border-top-left-radius: 1rem; /* Slightly rounded corners */
+    border-top-right-radius: 1rem; /* Slightly rounded corners */
+    border-bottom-left-radius: 1rem; /* Slightly rounded corners */
+    border-bottom-right-radius: 1rem; /* Slightly rounded corners */
 }
 
 /* Difference between ranks */
-.difference {
+::v-deep(.info) {
     display: inline-flex;
-    justify-items: center;
     align-items: center;
-    gap: 0.5rem;
+    background-color: #f5f5f5; /* Light gray background */
+    height: 2.5rem;
+    border-top-left-radius: 1rem; /* Slightly rounded corners */
+    border-top-right-radius: 1rem; /* Slightly rounded corners */
+    border-bottom-left-radius: 1rem; /* Slightly rounded corners */
+    border-bottom-right-radius: 1rem; /* Slightly rounded corners */
+    width: 100%;
 }
 
-.rank-info {
+::v-deep(.hidden) {
+    background-color: none;
+}
+
+::v-deep(.rank-info) {
     font-weight: bold;
     color: #888;
-    justify-items: right;
-    align-items: right;
 }
 
-.other-info {
+::v-deep(.other-info) {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #888;
+    width: 100%;
+    text-align: center;
+}
+
+::v-deep(.difference-text) {
     font-size: 1.1rem;
     font-weight: bold;
     color: #888;
 }
 
-::v-deep(.difference-text) {
-    text-align: right;
-    justify-content: right;
-    align-items: right;
+/* Final text styling */
+::v-deep(.final-text) {
+    display: inline-flex;
+    align-items: center;
 }
-
-/* Medal styling */
-::v-deep(.gold-medal) {
+::v-deep(.final-text.gold) {
     color: #FFD700; /* Gold color */
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
+    margin-left: -1rem;
 }
 
-::v-deep(.silver-medal) {
+::v-deep(.final-text.silver) {
     color: #C0C0C0; /* Silver color */
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
+    margin-left: -1rem;
 }
 
-::v-deep(.bronze-medal) {
+::v-deep(.final-text.bronze) {
     color: #CD7F32; /* Bronze color */
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
+    margin-left: -1rem;
+}
+
+::v-deep(.final-text.place) {
+    color: #888; /* Neutral dark color */
+    margin-left: -1rem;
 }
 
 /* Medal icon as circle */
@@ -287,7 +317,7 @@ export default {
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 50%;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
     color: white;
