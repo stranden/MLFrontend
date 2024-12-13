@@ -2,8 +2,14 @@
     <div class="scoreboard-container">
         <div class="scoreboard">
             <div class="header">
-                <img class="logo" src="@/assets/img/dif.png" alt="Logo" />
-                <h1>Final Stage Overview</h1>
+                <div v-if="logos && logos.length">
+                    <img class="logo" v-for="(logo, index) in logos" :key="index" :src="require(`@/assets/img/${logo}`)" :alt="`${logo.split('.')[0]}-Logo`" />
+                </div>
+                <div class="header-text">
+                    <span class="title">{{ title }}</span>
+                    <span class="discipline">{{ discipline }}</span>
+                    <span class="status">{{ status }}</span>
+                </div>
             </div>
             <div class="participant-list">
                 <div class="participant" v-for="(participant, index) in sortedParticipants" :key="participant.name">
@@ -35,11 +41,31 @@ export default {
             required: true,
         },
     },
+    data() {
+        return {
+            logos: [], // Array to store logos
+            title: "TITLE", // Default value if not provided in URL
+            discipline: "DISCIPLINE", // Default value if not provided in URL
+        };
+    },
+    created() {
+        this.extractLogosFromUrl();
+    },
     computed: {
         sortedParticipants() {
             // Sort participants based on their total score, descending
             return [...this.pushedData].sort((a, b) => parseFloat(b.totalScore) - parseFloat(a.totalScore));
         },
+        highestMatchShotCount() {
+            if (!this.pushedData.length) return 0;
+            return Math.max(...this.pushedData.map(pushedData => pushedData.matchShotCount));
+        },
+        status() {
+            if (this.highestMatchShotCount === Math.max(...this.pushedData.map(pushedData => pushedData.matchSize))) {
+                return `Final Standings after ${this.highestMatchShotCount} shots`;
+            }
+            return `Standing${this.highestMatchShotCount > 1 ? "s" : ""} after ${this.highestMatchShotCount} shot${this.highestMatchShotCount > 1 ? "s" : ""}`;
+        }
     },
     methods: {
         notesContent(index, participants) {
@@ -117,6 +143,28 @@ export default {
         },
         countryFlag(country) {
             return `fi fi-${convertIocToAlpha2(country).toLowerCase()} fi-rounded`;
+        },
+        extractLogosFromUrl() {
+            // Use URLSearchParams to get the query string parameters
+            const queryParams = new URLSearchParams(window.location.search);
+
+            // Parse the logos from the parameter if available
+            const logosParam = queryParams.get('logos'); // e.g., "dif.png,dsu.png"
+            if (logosParam) {
+                this.logos = logosParam.split(','); // Create an array of logo names
+            }
+
+            // Extract title
+            const titleParam = queryParams.get("title");
+            if (titleParam) {
+                this.title = decodeURIComponent(titleParam); // Handle spaces and special characters
+            }
+
+            // Extract discipline
+            const disciplineParam = queryParams.get("discipline");
+            if (disciplineParam) {
+                this.discipline = decodeURIComponent(disciplineParam);
+            }
         }
     },
 };
@@ -147,7 +195,7 @@ export default {
 .header {
     display: grid;
     grid-template-columns: auto 1fr; /* First column for logo, second column for title */
-    align-items: center;
+    align-items: center; /* Center-align items vertically */
     margin-bottom: 1.5rem;
     width: 100%;
 }
@@ -156,18 +204,35 @@ export default {
 .header .logo {
     height: 10rem; /* Height of logo matches the height of four rows */
     width: auto;
-    margin-right: 1rem; /* Space between logo and title */
+    margin-right: 2.5rem; /* Space between logo and title */
 }
 
-/* Header title horizontally centered */
-.header h1 {
-    font-size: 1.8rem;
+.header-text {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    text-align: left; /* Left-align text */
+}
+
+.header-text .title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem; /* Add spacing between lines */
+}
+
+.header-text .discipline {
+    font-size: 1.5rem;
+    font-weight: medium;
+    margin-bottom: 0.5rem;
+}
+
+.header-text .status {
+    font-size: 1.2rem;
+    font-weight: normal;
+}
+
+.header h1.title {
     color: #4a4a4a;
-    margin: 0;
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%); /* Center horizontally */
-    top: 6rem; /* Adjust top to position vertically, so it's not over the logo */
+    text-align: left;
 }
 
 /* Participant list container */
