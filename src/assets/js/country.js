@@ -189,6 +189,7 @@ const countryCodeMapping = {
     'SA': { alpha3: 'KSA', ioc: 'KSA' },
     'SB': { alpha3: 'SLB', ioc: 'SLB' },
     'SC': { alpha3: 'SYC', ioc: 'SYC' },
+    'SCO': { alpha3: 'SCO', ioc: 'SCO' },
     'SD': { alpha3: 'SDN', ioc: 'SDN' },
     'SE': { alpha3: 'SWE', ioc: 'SWE' },
     'SG': { alpha3: 'SIN', ioc: 'SIN' },

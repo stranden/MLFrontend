@@ -1849,11 +1849,11 @@
   background-image: url(../img/flags/1x1/gb-nir.svg);
 }
 
-.fi-gb-sct {
-  background-image: url(../img/flags/4x3/gb-sct.svg);
+.fi-sco {
+  background-image: url(../img/flags/4x3/sco.svg);
 }
-.fi-gb-sct.fis {
-  background-image: url(../img/flags/1x1/gb-sct.svg);
+.fi-sco.fis {
+  background-image: url(../img/flags/1x1/sco.svg);
 }
 
 .fi-gb-wls {
