@@ -13,7 +13,7 @@
             </div>
             <div class="participant-list">
                 <div class="participant" v-for="(participant, index) in sortedParticipants" :key="participant.name">
-                    <div class="rank">{{ index + 1 }}</div>
+                    <div class="rank">{{ participant.rank }}</div>
                     <div class="name-nation">
                         <span class="nation" :class="countryFlag(participant.club)"></span>
                         <span class="name">{{ participant.name }}</span>
@@ -54,7 +54,20 @@ export default {
     computed: {
         sortedParticipants() {
             // Sort participants based on their total score, descending
-            return [...this.pushedData].sort((a, b) => parseFloat(b.totalScore) - parseFloat(a.totalScore));
+            // return [...this.pushedData].sort((a, b) => parseFloat(b.totalScore) - parseFloat(a.totalScore));
+            let participants = [...this.pushedData].sort((a, b) => parseFloat(b.totalScore) - parseFloat(a.totalScore));
+
+            // Assign ranks properly considering ties
+            let rank = 1;
+            for (let i = 0; i < participants.length; i++) {
+                if (i > 0 && participants[i].totalScore === participants[i - 1].totalScore) {
+                    participants[i].rank = participants[i - 1].rank; // Same rank as previous
+                } else {
+                    participants[i].rank = rank;
+                }
+                rank++;
+            }
+            return participants;
         },
         highestMatchShotCount() {
             if (!this.pushedData.length) return 0;
