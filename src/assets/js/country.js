@@ -160,7 +160,7 @@ const countryCodeMapping = {
     'NF': { alpha3: 'NFK', ioc: 'NFK' },
     'NG': { alpha3: 'NGA', ioc: 'NGA' },
     'NI': { alpha3: 'NIC', ioc: 'NIC' },
-    'NL': { alpha3: 'NLD', ioc: 'NLD' },
+    'NL': { alpha3: 'NLD', ioc: 'NED' },
     'NO': { alpha3: 'NOR', ioc: 'NOR' },
     'NP': { alpha3: 'NPL', ioc: 'NEP' },
     'NR': { alpha3: 'NRU', ioc: 'NRU' },

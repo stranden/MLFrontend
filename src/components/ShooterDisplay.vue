@@ -121,8 +121,13 @@ export default {
             return array.filter(item => ['','E','P','W','T','ES','SP'].includes(item.flags));
         },
         svgSource(country) {
-            if (country) {
-                return require(`@/assets/img/flags/${country}.svg`);
+            try {
+                if (country) {
+                    return require(`@/assets/img/flags/${country}.svg`);
+                }
+            } catch (error) {
+                console.error(`SVG for ${country} not found`, country)
+                return null;
             }
         },
         extractShotsForShooter(array) {
