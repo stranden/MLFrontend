@@ -1,11 +1,10 @@
-// ApiService.js
+// src/services/ApiService.js
 import axios from 'axios';
 
 // Base URL of your API
-const baseURL = 'http://' + process.env.VUE_APP_MLRANGE + ':8088/tv'
+const baseURL = 'http://' + process.env.VUE_APP_MLRANGE + ':8088/tv';
 
 const ApiService = {
-
     // Method to fetch data from the API
     fetchData() {
         return axios.get(`${baseURL}/get?method=fp&params=["A","B","C","D","E","F","G","H"]&id=1`)

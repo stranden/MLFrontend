@@ -1,3 +1,5 @@
+// src/assets/js/util/country.js
+
 // Unified mapping for Alpha-2, Alpha-3 to IOC and vice versa
 const countryCodeMapping = {
     'AE': { alpha3: 'ARE', ioc: 'UAE' },

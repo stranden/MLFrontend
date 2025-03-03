@@ -24,7 +24,7 @@ import ApiService from '@/services/ApiService';
 import SocketService from '@/services/SocketService';
 
 import '@/assets/css/flag-icons.css';
-import { convertIocToAlpha2 } from '@/assets/js/country.js';
+import { convertIocToAlpha2 } from '@/assets/js/util/country.js';
 
 export default {
     name: 'LeaderBoard',
