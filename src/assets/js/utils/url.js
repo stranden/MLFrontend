@@ -1,4 +1,4 @@
-// src/assets/js/util/url.js
+// src/assets/js/utils/url.js
 export function extractLogosFromUrl() {
     const queryParams = new URLSearchParams(window.location.search);
     const logosParam = queryParams.get('logos');

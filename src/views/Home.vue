@@ -43,6 +43,11 @@ export default {
                     id: 5,
                     text: 'ShootingTimer',
                     page: '/shootingtimer'
+                },
+                {
+                    id: 6,
+                    text: 'FinalTest',
+                    page: '/FinalTest'
                 }
             ]
         }

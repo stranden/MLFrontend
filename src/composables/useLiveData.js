@@ -10,7 +10,7 @@ const getQueryParam = (param) => {
 
 export function useLiveData() {
     const fetchedData = ref([]);
-    const isTestMode = getQueryParam('test') === 'true';
+    const isTestMode = getQueryParam('test') === 'true' || getQueryParam('test') === 'True';
     const testFile = getQueryParam('testdata');
 
     // Function to load test data from local JSON file
@@ -21,7 +21,7 @@ export function useLiveData() {
         }
         try {
             const data = await import(`@/testdata/${testFile}.json`);
-            fetchedData.value = data.default;
+            fetchedData.value = data.result;
             console.log('Loaded test data:', fetchedData.value);
         } catch (error) {
             console.error('Error loading test data:', error);

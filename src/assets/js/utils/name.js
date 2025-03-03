@@ -1,5 +1,11 @@
-// src/assets/js/util/name.js
+// src/assets/js/utils/name.js
 export function formatName(name) {
+    // Check if name is valid (non-null and non-undefined)
+    if (!name || typeof name !== 'string') {
+        console.error('Invalid name:', name);
+        return ''; // Return an empty string or a fallback value
+    }
+
     const nameParts = name.split(' ');
     const lastName = nameParts[0] || '';
     const firstName = nameParts[1] || '';

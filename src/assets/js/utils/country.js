@@ -1,4 +1,4 @@
-// src/assets/js/util/country.js
+// src/assets/js/utils/country.js
 
 // Unified mapping for Alpha-2, Alpha-3 to IOC and vice versa
 const countryCodeMapping = {

@@ -1,5 +1,5 @@
-// src/assets/js/util/image.js
-import { convertIocToAlpha2 } from '@/assets/js/util/country.js';
+// src/assets/js/utils/image.js
+import { convertIocToAlpha2 } from '@/assets/js/utils/country.js';
 
 export function svgSource(country) {
     try {

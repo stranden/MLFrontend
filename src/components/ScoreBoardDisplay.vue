@@ -31,7 +31,7 @@
 
 <script>
 import '@/assets/css/flag-icons.css';
-import { convertIocToAlpha2 } from '@/assets/js/util/country.js';
+import { convertIocToAlpha2 } from '@/assets/js/utils/country.js';
 
 export default {
     name: "ScoreBoardDisplay",
