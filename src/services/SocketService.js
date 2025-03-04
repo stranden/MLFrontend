@@ -1,11 +1,8 @@
-// src/services/SocketService.js
-const baseURL = 'ws://' + process.env.VUE_APP_MLRANGE + ':8088/tv/ws';
-
 const SocketService = {
-    socket: null, // WebSocket instance
+    socket: null,
 
-    // Initialize WebSocket connection
-    connect() {
+    connect(mlrangeIP) {
+        const baseURL = `ws://${mlrangeIP}:8088/tv/ws`;
         this.socket = new WebSocket(baseURL);
 
         this.socket.addEventListener('open', () => {
@@ -21,7 +18,6 @@ const SocketService = {
         });
     },
 
-    // Method to listen for events from the WebSocket server
     listen(eventName, callback) {
         if (!this.socket) {
             console.error('WebSocket is not connected');
@@ -37,7 +33,6 @@ const SocketService = {
         });
     },
 
-    // Method to stop listening for events
     off(eventName, callback) {
         if (!this.socket) {
             console.error('WebSocket is not connected');
@@ -47,7 +42,6 @@ const SocketService = {
         this.socket.removeEventListener('message', callback);
     },
 
-    // Method to disconnect from the WebSocket
     disconnect() {
         if (this.socket) {
             this.socket.close();

@@ -35,14 +35,16 @@ import { formatName, countryFlag } from '@/assets/js/util';
 export default {
     name: 'ScoreBoardTest',
     setup() {
-        const { fetchedData } = useLiveData();
-        return { fetchedData };
+        // Use the useLiveData composable
+        const { fetchedData, isTestMode, testFile } = useLiveData();
+        return { fetchedData, isTestMode, testFile };
     },
     data() {
         return {
             logos: [],
             title: 'TITLE',
-            discipline: 'DISCIPLINE'
+            discipline: 'DISCIPLINE',
+            lanes: [] // Lanes will be populated based on URL or default
         };
     },
     computed: {
@@ -68,11 +70,21 @@ export default {
         }
     },
     methods: {
-        extractLogosFromUrl() {
+        extractParamsFromUrl() {
             const queryParams = new URLSearchParams(window.location.search);
+
+            // Extract logos, title, and discipline
             this.logos = queryParams.get('logos')?.split(',') || [];
             this.title = queryParams.get('title') || 'TITLE';
             this.discipline = queryParams.get('discipline') || 'DISCIPLINE';
+
+            // Extract lanes or use default
+            this.lanes = queryParams.get('lanes')?.split(',') || ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+        },
+        getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
         },
         notesContent(index, participants) {
             const participant = participants[index];
@@ -149,9 +161,17 @@ export default {
         }
     },
     mounted() {
-        this.extractLogosFromUrl();
+        this.extractParamsFromUrl(); // Updated function name
         this.countryFlag = countryFlag;
         this.formatName = formatName;
+
+        // Log test mode and test file
+        if (this.isTestMode) {
+            console.log('Test mode is enabled with file:', this.testFile);
+        }
+
+        // Log lanes
+        console.log('Lanes:', this.lanes);
     }
 };
 </script>

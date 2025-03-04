@@ -5,40 +5,98 @@
             <p>Your one-stop solution for managing TV graphics for finals</p>
         </header>
 
-        <div class="links-container">
-            <h2>Quick Links</h2>
-            <div class="links-grid">
-                <router-link v-for="link in links" :key="link.id" :to="link.page" class="link-card">
-                    <span class="link-text">{{ link.text }}</span>
-                </router-link>
-            </div>
+        <!-- Configuration Section -->
+        <div class="config-section">
+            <h2>Configuration</h2>
+            <form @submit.prevent="saveConfig" class="config-form">
+                <!-- Test Mode Toggle -->
+                <div class="form-group">
+                    <label for="test-mode">Test Mode:</label>
+                    <input id="test-mode" v-model="isTestMode" type="checkbox" class="form-checkbox" @change="toggleTestMode" />
+                </div>
+
+                <!-- MLRange Configuration (hidden in Test Mode) -->
+                <div v-if="!isTestMode" class="mlrange-config">
+                    <div class="form-group">
+                        <label for="mlrange-ip">MLRange IP:</label>
+                        <input id="mlrange-ip" v-model="mlrangeConfig.ip" type="text" placeholder="Enter MLRange IP" class="form-input" />
+                    </div>
+                </div>
+
+                <!-- Test Data Selection (visible in Test Mode) -->
+                <div v-if="isTestMode" class="test-config">
+                    <div class="form-group">
+                        <label for="test-file">Test Data File:</label>
+                        <select id="test-file" v-model="selectedTestFile" class="form-select">
+                            <option v-for="file in testFiles" :key="file" :value="file">
+                                {{ file }}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="save-button">Save Configuration</button>
+            </form>
         </div>
 
-        <div class="url-builder">
-            <h2>Customize and Generate URL</h2>
-            <form @submit.prevent="generateUrl" class="url-form">
-                <div class="form-group">
-                    <label for="logos">Select Logos:</label>
-                    <select id="logos" v-model="selectedLogos" multiple class="form-select">
-                        <option v-for="logo in availableLogos" :key="logo" :value="logo">
-                            {{ logo }}
-                        </option>
-                    </select>
+        <!-- Modules Section -->
+        <div class="modules-container">
+            <h2>Modules</h2>
+            <div class="modules-grid">
+                <div
+                    v-for="module in modules"
+                    :key="module.id"
+                    class="module-card"
+                    :class="{ 'module-card-selected': selectedModule?.id === module.id }"
+                    @click="selectModule(module)"
+                >
+                    <span class="module-text">{{ module.name }}</span>
                 </div>
-                <div class="form-group">
-                    <label for="title">Title:</label>
-                    <input id="title" v-model="title" type="text" placeholder="Enter title" class="form-input" />
-                </div>
-                <div class="form-group">
-                    <label for="discipline">Discipline:</label>
-                    <input id="discipline" v-model="discipline" type="text" placeholder="Enter discipline" class="form-input" />
-                </div>
-                <button type="submit" class="generate-button">Generate URL</button>
-            </form>
+            </div>
 
-            <div v-if="generatedUrl" class="generated-url">
-                <p>Your custom URL:</p>
-                <a :href="generatedUrl" target="_blank" class="generated-link">{{ generatedUrl }}</a>
+            <!-- Module Configuration Form -->
+            <div v-if="selectedModule" class="module-form">
+                <h3>Configure {{ selectedModule.name }}</h3>
+                <form @submit.prevent="generateModuleUrl">
+                    <!-- Lanes Field -->
+                    <div v-if="selectedModule.fields.includes('lanes')" class="form-group">
+                        <label for="lanes">Lanes:</label>
+                        <select id="lanes" v-model="moduleConfig.lanes" multiple class="form-select">
+                            <option v-for="lane in lanes" :key="lane" :value="lane">
+                                {{ lane }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Logos Field -->
+                    <div v-if="selectedModule.fields.includes('logos')" class="form-group">
+                        <label for="logos">Logos:</label>
+                        <select id="logos" v-model="moduleConfig.logos" multiple class="form-select">
+                            <option v-for="logo in availableLogos" :key="logo" :value="logo">
+                                {{ logo }}
+                            </option>
+                        </select>
+                    </div>
+
+                    <!-- Title Field -->
+                    <div v-if="selectedModule.fields.includes('title')" class="form-group">
+                        <label for="title">Title:</label>
+                        <input id="title" v-model="moduleConfig.title" type="text" placeholder="Enter title" class="form-input" />
+                    </div>
+
+                    <!-- Discipline Field -->
+                    <div v-if="selectedModule.fields.includes('discipline')" class="form-group">
+                        <label for="discipline">Discipline:</label>
+                        <input id="discipline" v-model="moduleConfig.discipline" type="text" placeholder="Enter discipline" class="form-input" />
+                    </div>
+
+                    <button type="submit" class="generate-button">Generate URL</button>
+                </form>
+
+                <div v-if="generatedModuleUrl" class="generated-url">
+                    <p>Your custom URL:</p>
+                    <a :href="generatedModuleUrl" target="_blank" class="generated-link">{{ generatedModuleUrl }}</a>
+                </div>
             </div>
         </div>
     </div>
@@ -49,40 +107,119 @@ export default {
     name: 'HomePage',
     data() {
         return {
-            links: [
-                { id: 1, text: 'Final', page: '/final' },
-                { id: 2, text: 'Mixed', page: '/mixed' },
-                { id: 3, text: 'Scoreboard', page: '/scoreboard' },
-                { id: 4, text: 'Leaderboard', page: '/leaderboard' },
-                { id: 5, text: 'ShootingTimer', page: '/shootingtimer' },
-                { id: 6, text: 'FinalTest', page: '/finaltest/?test=true&testdata=AR10WJ-SO-GOLD' },
-                { id: 7, text: 'ScoreboardTest', page: '/scoreboardtest?test=true&testdata=AR10WJ-SO-GOLD' }
+            isTestMode: false,
+            mlrangeConfig: {
+                ip: ''
+            },
+            testFiles: [],
+            selectedTestFile: '',
+            lanes: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'], // Local lanes array
+            modules: [
+                {
+                    id: 1,
+                    name: 'Final',
+                    route: '/finaltest',
+                    fields: ['lanes']
+                },
+                {
+                    id: 2,
+                    name: 'Mixed',
+                    route: '/mixed',
+                    fields: ['lanes']
+                },
+                {
+                    id: 3,
+                    name: 'Scoreboard',
+                    route: '/scoreboardtest',
+                    fields: ['lanes', 'logos', 'title', 'discipline']
+                },
+                {
+                    id: 4,
+                    name: 'Leaderboard',
+                    route: '/leaderboard',
+                    fields: []
+                },
+                {
+                    id: 5,
+                    name: 'ShootingTimer',
+                    route: '/shootingtimer',
+                    fields: []
+                }
             ],
-            availableLogos: [],
-            selectedLogos: [],
-            title: '',
-            discipline: '',
-            generatedUrl: ''
+            selectedModule: null,
+            moduleConfig: {},
+            generatedModuleUrl: '',
+            availableLogos: []
         };
     },
     methods: {
+        toggleTestMode() {
+            if (this.isTestMode) {
+                this.mlrangeConfig = { ip: '' };
+            }
+        },
+        saveConfig() {
+            if (this.isTestMode) {
+                document.cookie = `MLRangeTest=true; path=/`;
+                document.cookie = `MLRangeTestData=${this.selectedTestFile}; path=/`;
+            } else {
+                document.cookie = `MLRangeIP=${this.mlrangeConfig.ip}; path=/`;
+                document.cookie = 'MLRangeTest=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+                document.cookie = 'MLRangeTestData=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+            }
+            alert('Configuration saved successfully!');
+        },
+        fetchTestFiles() {
+            const context = require.context('@/testdata/', false, /\.json$/);
+            this.testFiles = context.keys().map(key => key.replace('./', '').replace('.json', ''));
+        },
         fetchLogos() {
             const context = require.context('@/assets/img/logos/', false, /\.png$/);
             this.availableLogos = context.keys().map(key => key.replace('./', ''));
         },
-        generateUrl() {
+        selectModule(module) {
+            this.selectedModule = module;
+            this.moduleConfig = {};
+            this.generatedModuleUrl = '';
+        },
+        generateModuleUrl() {
             const baseUrl = window.location.origin;
-            const logosParam = this.selectedLogos.join(',');
-            const queryParams = new URLSearchParams({
-                logos: logosParam,
-                title: this.title,
-                discipline: this.discipline
-            }).toString();
+            const queryParams = new URLSearchParams();
 
-            this.generatedUrl = `${baseUrl}/scoreboard?${queryParams}`;
+            // Add lanes to the query parameters
+            if (this.selectedModule.fields.includes('lanes') && this.moduleConfig.lanes) {
+                queryParams.set('lanes', this.moduleConfig.lanes.join(','));
+            }
+
+            // Add logos to the query parameters
+            if (this.selectedModule.fields.includes('logos') && this.moduleConfig.logos) {
+                queryParams.set('logos', this.moduleConfig.logos.join(','));
+            }
+
+            // Add title to the query parameters
+            if (this.selectedModule.fields.includes('title') && this.moduleConfig.title) {
+                queryParams.set('title', this.moduleConfig.title);
+            }
+
+            // Add discipline to the query parameters
+            if (this.selectedModule.fields.includes('discipline') && this.moduleConfig.discipline) {
+                queryParams.set('discipline', this.moduleConfig.discipline);
+            }
+
+            this.generatedModuleUrl = `${baseUrl}${this.selectedModule.route}?${queryParams.toString()}`;
+        },
+        getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
         }
     },
     mounted() {
+        this.isTestMode = this.getCookie('MLRangeTest') === 'true';
+        this.mlrangeConfig.ip = this.getCookie('MLRangeIP') || '';
+        this.selectedTestFile = this.getCookie('MLRangeTestData') || '';
+
+        this.fetchTestFiles();
         this.fetchLogos();
     }
 };
@@ -95,7 +232,7 @@ export default {
     margin: 0 auto;
     padding: 20px;
     font-family: 'Arial', sans-serif;
-    color: #4a4a4a; /* Adjusted to match the scoreboard color scheme */
+    color: #4a4a4a;
 }
 
 .header {
@@ -105,69 +242,25 @@ export default {
 
 .header h1 {
     font-size: 2.5rem;
-    color: #2c3e50; /* Dark blue for headers */
+    color: #2c3e50;
     margin-bottom: 10px;
 }
 
 .header p {
     font-size: 1.2rem;
-    color: #7f8c8d; /* Grey for subtext */
+    color: #7f8c8d;
 }
 
-/* Links Section */
-.links-container {
+/* Configuration Section */
+.config-section {
     margin-bottom: 40px;
-}
-
-.links-container h2 {
-    font-size: 1.8rem;
-    color: #2c3e50; /* Dark blue for headers */
-    margin-bottom: 20px;
-}
-
-.links-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-}
-
-.link-card {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    background-color: #1c9c4a; /* Green background for links */
-    color: white;
-    text-decoration: none;
-    border-radius: 8px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-}
-
-.link-card:hover {
-    background-color: #168f3f; /* Darker green on hover */
-    transform: translateY(-5px);
-}
-
-.link-text {
-    font-size: 1.2rem;
-    font-weight: bold;
-}
-
-/* URL Builder Section */
-.url-builder {
-    background-color: #f9f9f9; /* Light grey background */
+    background-color: #f9f9f9;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.url-builder h2 {
-    font-size: 1.8rem;
-    color: #2c3e50; /* Dark blue for headers */
-    margin-bottom: 20px;
-}
-
-.url-form {
+.config-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -177,15 +270,17 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    margin-bottom: 20px; /* Added spacing between form groups */
 }
 
 .form-group label {
     font-size: 1rem;
-    color: #2c3e50; /* Dark blue for labels */
+    color: #2c3e50;
 }
 
+.form-input,
 .form-select,
-.form-input {
+.form-checkbox {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -194,24 +289,88 @@ export default {
     transition: border-color 0.3s ease;
 }
 
+.form-input:focus,
 .form-select:focus,
-.form-input:focus {
-    border-color: #1c9c4a; /* Green border on focus */
+.form-checkbox:focus {
+    border-color: #1c9c4a;
 }
 
+.save-button,
 .generate-button {
     padding: 10px 20px;
-    background-color: #1c9c4a; /* Green background for button */
+    background-color: #1c9c4a;
     color: white;
     border: none;
     border-radius: 4px;
     font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    width: 100%; /* Span the entire width */
 }
 
+.save-button:hover,
 .generate-button:hover {
-    background-color: #168f3f; /* Darker green on hover */
+    background-color: #168f3f;
+}
+
+/* Modules Section */
+.modules-container {
+    margin-bottom: 40px;
+}
+
+.modules-container h2 {
+    font-size: 1.8rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
+}
+
+.modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.module-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background-color: #1c9c4a;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.module-card:hover {
+    background-color: #168f3f;
+    transform: translateY(-5px);
+}
+
+.module-card-selected {
+    background-color: #168f3f;
+    border: 2px solid #0f6b2f;
+}
+
+.module-text {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Module Configuration Form */
+.module-form {
+    margin-top: 20px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.module-form h3 {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    margin-bottom: 20px;
 }
 
 /* Generated URL Section */
@@ -222,13 +381,13 @@ export default {
 
 .generated-url p {
     font-size: 1.2rem;
-    color: #2c3e50; /* Dark blue for text */
+    color: #2c3e50;
     margin-bottom: 10px;
 }
 
 .generated-link {
     font-size: 1rem;
-    color: #1c9c4a; /* Green for links */
+    color: #1c9c4a;
     text-decoration: none;
     word-break: break-all;
 }
