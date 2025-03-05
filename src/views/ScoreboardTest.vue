@@ -49,16 +49,35 @@ export default {
     },
     computed: {
         sortedParticipants() {
-            let participants = [...this.fetchedData].sort((a, b) => parseFloat(b.totalScore) - parseFloat(a.totalScore));
+            // Step 1: Sort participants by totalScore (descending), and non-SP first on ties
+            const participants = [...this.fetchedData].sort((a, b) => {
+                const scoreDiff = parseFloat(b.totalScore) - parseFloat(a.totalScore);
+                if (scoreDiff !== 0) return scoreDiff;
+                
+                // Prioritize non-SP shooters when scores are tied
+                if (a.flags.includes("SP") && !b.flags.includes("SP")) return 1; // a has SP, b comes first
+                if (!a.flags.includes("SP") && b.flags.includes("SP")) return -1; // b has SP, a comes first
+                return 0;
+            });
+
+            // Step 2: Assign ranks, handling gold/silver tiebreaker
             let rank = 1;
             for (let i = 0; i < participants.length; i++) {
                 if (i > 0 && participants[i].totalScore === participants[i - 1].totalScore) {
                     participants[i].rank = participants[i - 1].rank;
+                    
+                    // Gold/Silver tiebreaker: Assign rank 2 to SP shooter if tied for 1st
+                    if (participants[i - 1].rank === 1 && participants[i].flags.includes("SP")) {
+                        participants[i].rank = 2;
+                    }
                 } else {
                     participants[i].rank = rank;
                 }
-                rank++;
+                
+                // Update the next rank to assign
+                rank = participants[i].rank + 1;
             }
+            console.log("[DEBUG] Logging output from sortedParticipants: ", participants);
             return participants;
         },
         status() {
