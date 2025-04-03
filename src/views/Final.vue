@@ -35,7 +35,7 @@ export default {
         Target
     },
     setup() {
-        const { fetchedData } = useLiveData();
+        const { fetchedData } = useLiveData('fp');
         return { fetchedData, formatName, svgSource };
     },
     computed: {

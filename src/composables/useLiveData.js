@@ -15,8 +15,10 @@ const getCookie = (name) => {
     if (parts.length === 2) return parts.pop().split(';').shift();
 };
 
-export function useLiveData() {
+export function useLiveData(initialMethod = '') {
+    // Reactive references to hold fetched data and method
     const fetchedData = ref([]);
+    const method = ref(initialMethod);
 
     // Check if test mode is enabled via cookies
     const isTestMode = getCookie('MLRangeTest') === 'true';
@@ -57,7 +59,7 @@ export function useLiveData() {
         }
         try {
             // Pass mlrangeIP and lanes to the API
-            const response = await ApiService.fetchData(mlrangeIP, lanes.join(','));
+            const response = await ApiService.fetchData(mlrangeIP, method.value, lanes.join(','));
             fetchedData.value = response.result;
             console.log('Fetched data:', fetchedData.value);
         } catch (error) {
