@@ -123,8 +123,8 @@ export default {
                 },
                 {
                     id: 2,
-                    name: 'Mixed',
-                    route: '/mixed',
+                    name: 'Head-to-Head',
+                    route: '/finalheadtohead',
                     fields: ['lanes']
                 },
                 {
@@ -135,16 +135,23 @@ export default {
                 },
                 {
                     id: 4,
-                    name: 'Leaderboard',
-                    route: '/leaderboard',
-                    fields: []
-                },
-                {
-                    id: 5,
                     name: 'ShootingTimer',
                     route: '/shootingtimer',
                     fields: []
                 }
+                //{
+                //    id: 5,
+                //    name: 'Mixed',
+                //    route: '/mixed',
+                //    fields: ['lanes']
+                //},
+                //{
+                //    id: 6,
+                //    name: 'Leaderboard',
+                //    route: '/leaderboard',
+                //    fields: []
+                //},
+                
             ],
             selectedModule: null,
             moduleConfig: {},

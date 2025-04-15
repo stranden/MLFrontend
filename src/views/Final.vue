@@ -18,7 +18,7 @@
                 <div class="nameText">{{ formatName(data.name) }}</div>
             </div>
             <div class="clubTextContainer">
-                <div class="clubText"><img :src="svgSource(data.club)" alt="nation" /><span>{{ data.club }}</span></div>
+                <div class="clubText"><img :src="svgSource(parseClubData(data.club).nation)" alt="nation" /><span>{{ parseClubData(data.club).club }}</span></div>
             </div>
         </div>
     </div>
@@ -85,6 +85,28 @@ export default {
         // Include shooters with a specific flag
         includeShootersWithFlags(shooters, flagKey, flagValue) {
             return shooters.filter(shooter => shooter[flagKey] === flagValue);
+        },
+        parseClubData(clubString) {
+            if (!clubString)
+                return { nation: '', club: '' };
+
+            const parts = clubString.split(',').map(part => part.trim());
+
+            if (parts.length >= 2) {
+                const nation = parts[0];
+                const clubFull = parts.slice(1).join(', ');
+                const clubShort = clubFull.split(' ')[0];
+                return {
+                    nation,
+                    club: clubShort
+                };
+            } else {
+                const firstWord = clubString.split(' ')[0];
+                return {
+                    nation: clubString,
+                    club: firstWord
+                };
+            }
         }
     }
 };
