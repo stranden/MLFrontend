@@ -15,7 +15,7 @@
                 <div class="participant" v-for="(participant, index) in sortedParticipants" :key="participant.name">
                     <div class="rank">{{ participant.rank }}</div>
                     <div class="name-nation">
-                        <span class="nation" :class="countryFlag(participant.club)"></span>
+                        <span class="nation" :class="countryFlag(parseClubData(participant.club).nation)"></span>
                         <span class="name">{{ formatName(participant.name) }}</span>
                     </div>
                     <div class="total-score-container">
@@ -30,7 +30,7 @@
 
 <script>
 import { useLiveData } from '@/composables/useLiveData';
-import { formatName, countryFlag } from '@/assets/js/util';
+import { formatName, countryFlag, parseClubData } from '@/assets/js/util';
 
 export default {
     name: 'ScoreBoardTest',
@@ -182,6 +182,7 @@ export default {
     mounted() {
         this.extractParamsFromUrl(); // Updated function name
         this.countryFlag = countryFlag;
+        this.parseClubData = parseClubData;
         this.formatName = formatName;
 
         // Log test mode and test file

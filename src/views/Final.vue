@@ -26,7 +26,7 @@
 
 <script>
 import { useLiveData } from '@/composables/useLiveData.js';
-import { formatName, svgSource } from '@/assets/js/util.js';
+import { formatName, svgSource, parseClubData } from '@/assets/js/util.js';
 import Target from '@/components/Target.vue';
 
 export default {
@@ -36,7 +36,7 @@ export default {
     },
     setup() {
         const { fetchedData } = useLiveData('fp');
-        return { fetchedData, formatName, svgSource };
+        return { fetchedData, formatName, svgSource, parseClubData };
     },
     computed: {
         // Number of shooters based on flags
@@ -85,28 +85,6 @@ export default {
         // Include shooters with a specific flag
         includeShootersWithFlags(shooters, flagKey, flagValue) {
             return shooters.filter(shooter => shooter[flagKey] === flagValue);
-        },
-        parseClubData(clubString) {
-            if (!clubString)
-                return { nation: '', club: '' };
-
-            const parts = clubString.split(',').map(part => part.trim());
-
-            if (parts.length >= 2) {
-                const nation = parts[0];
-                const clubFull = parts.slice(1).join(', ');
-                const clubShort = clubFull.split(' ')[0];
-                return {
-                    nation,
-                    club: clubShort
-                };
-            } else {
-                const firstWord = clubString.split(' ')[0];
-                return {
-                    nation: clubString,
-                    club: firstWord
-                };
-            }
         }
     }
 };
