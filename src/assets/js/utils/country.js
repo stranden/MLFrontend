@@ -334,4 +334,29 @@ export function convertAlpha3ToAlpha2(alpha3Code) {
   }
   return mapping.alpha2;
 }
+
+// Function to parse club data from a string
+export function parseClubData(clubString) {
+  console.log(`parseClubData: ${clubString}`);
+  if (!clubString)
+      return { nation: '', club: '' };
+
+  const parts = clubString.split(',').map(part => part.trim());
+
+  if (parts.length >= 2) {
+      const nation = parts[0];
+      const clubFull = parts.slice(1).join(', ');
+      const clubShort = clubFull.split(' ')[0];
+      return {
+          nation,
+          club: clubShort
+      };
+  } else {
+      const firstWord = clubString.split(' ')[0];
+      return {
+          nation: clubString,
+          club: firstWord
+      };
+  }
+}
   

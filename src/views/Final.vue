@@ -18,7 +18,7 @@
                 <div class="nameText">{{ formatName(data.name) }}</div>
             </div>
             <div class="clubTextContainer">
-                <div class="clubText"><img :src="svgSource(data.club)" alt="nation" /><span>{{ data.club }}</span></div>
+                <div class="clubText"><img :src="svgSource(parseClubData(data.club).nation)" alt="nation" /><span>{{ parseClubData(data.club).club }}</span></div>
             </div>
         </div>
     </div>
@@ -26,7 +26,7 @@
 
 <script>
 import { useLiveData } from '@/composables/useLiveData.js';
-import { formatName, svgSource } from '@/assets/js/util.js';
+import { formatName, svgSource, parseClubData } from '@/assets/js/util.js';
 import Target from '@/components/Target.vue';
 
 export default {
@@ -35,8 +35,8 @@ export default {
         Target
     },
     setup() {
-        const { fetchedData } = useLiveData();
-        return { fetchedData, formatName, svgSource };
+        const { fetchedData } = useLiveData('fp');
+        return { fetchedData, formatName, svgSource, parseClubData };
     },
     computed: {
         // Number of shooters based on flags
