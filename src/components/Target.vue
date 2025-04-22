@@ -33,11 +33,6 @@ export default {
         }
     },
     methods: {
-        /*drawTarget() {
-            const targetSVG = this.$refs.targetSVG;
-            const targetContainerWidth = targetSVG.clientWidth;
-            createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
-        }*/
         drawTarget() {
             const targetSVG = this.$refs.targetSVG;
             const targetContainerWidth = targetSVG.clientWidth;

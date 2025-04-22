@@ -118,7 +118,7 @@ export default {
                 {
                     id: 1,
                     name: 'Final',
-                    route: '/finaltest',
+                    route: '/final',
                     fields: ['lanes']
                 },
                 {
@@ -130,7 +130,7 @@ export default {
                 {
                     id: 3,
                     name: 'Scoreboard',
-                    route: '/scoreboardtest',
+                    route: '/scoreboard',
                     fields: ['lanes', 'logos', 'title', 'discipline']
                 },
                 {
@@ -191,29 +191,26 @@ export default {
         },
         generateModuleUrl() {
             const baseUrl = window.location.origin;
-            const queryParams = new URLSearchParams();
+            const params = [];
 
-            // Add lanes to the query parameters
             if (this.selectedModule.fields.includes('lanes') && this.moduleConfig.lanes) {
-                queryParams.set('lanes', this.moduleConfig.lanes.join(','));
+                params.push(`lanes=${this.moduleConfig.lanes.join(',')}`);
             }
 
-            // Add logos to the query parameters
             if (this.selectedModule.fields.includes('logos') && this.moduleConfig.logos) {
-                queryParams.set('logos', this.moduleConfig.logos.join(','));
+                params.push(`logos=${this.moduleConfig.logos.join(',')}`);
             }
 
-            // Add title to the query parameters
             if (this.selectedModule.fields.includes('title') && this.moduleConfig.title) {
-                queryParams.set('title', this.moduleConfig.title);
+                params.push(`title=${encodeURIComponent(this.moduleConfig.title)}`);
             }
 
-            // Add discipline to the query parameters
             if (this.selectedModule.fields.includes('discipline') && this.moduleConfig.discipline) {
-                queryParams.set('discipline', this.moduleConfig.discipline);
+                params.push(`discipline=${encodeURIComponent(this.moduleConfig.discipline)}`);
             }
 
-            this.generatedModuleUrl = `${baseUrl}${this.selectedModule.route}?${queryParams.toString()}`;
+            const queryString = params.join('&');
+            this.generatedModuleUrl = `${baseUrl}${this.selectedModule.route}/?${queryString}`;
         },
         getCookie(name) {
             const value = `; ${document.cookie}`;

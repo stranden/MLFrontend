@@ -337,7 +337,6 @@ export function convertAlpha3ToAlpha2(alpha3Code) {
 
 // Function to parse club data from a string
 export function parseClubData(clubString) {
-  console.log(`parseClubData: ${clubString}`);
   if (!clubString)
       return { nation: '', club: '' };
 
@@ -348,14 +347,14 @@ export function parseClubData(clubString) {
       const clubFull = parts.slice(1).join(', ');
       const clubShort = clubFull.split(' ')[0];
       return {
-          nation,
-          club: clubShort
+          nation: nation.toUpperCase(),
+          club: clubShort.toUpperCase()
       };
   } else {
       const firstWord = clubString.split(' ')[0];
       return {
-          nation: clubString,
-          club: firstWord
+          nation: clubString.toUpperCase(),
+          club: firstWord.toUpperCase()
       };
   }
 }
