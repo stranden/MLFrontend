@@ -11,8 +11,8 @@ const routes = [
     { path: '/', component: Home },
     { path: '/scoreboard', component: Scoreboard },
     { path: '/leaderboard', component: Leaderboard },
-    { path: '/final', component: Final },
-    { path: '/finaltest', component: IndvidualFinal },
+    { path: '/final', component: IndvidualFinal },
+    { path: '/finaltest', component: Final },
     { path: '/mixed', component: MixedFinal },
     { path: '/shootingtimer', component: ShootingTimer }
 ];

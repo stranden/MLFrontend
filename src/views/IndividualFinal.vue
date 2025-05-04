@@ -1,24 +1,26 @@
 <template>
-    <div id="shootingDisplayContainer">
-        <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
-            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
-            <div class="scoreTextTopRightContainer">
-                <div class="scoreTextTopRight">SCORE</div>
-            </div>
-            <div class="scoreShotValueContainer">
-                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
-            </div>
-            <div class="scoreTotalContainer">
-                <div class="scoreTotal">{{ data.totalScore }}</div>
-            </div>
-            <div class="scoreTotalTextContainer">
-                <div class="scoreTotalText">Total</div>
-            </div>
-            <div class="nameTextContainer">
-                <div class="nameText">{{ formatName(data.name) }}</div>
-            </div>
-            <div class="clubTextContainer">
-                <div class="clubText"><img :src="svgSource(parseClubData(data.club).nation)" alt="nation" /><span>{{ parseClubData(data.club).club }}</span></div>
+    <div v-if="stageInfo.stage === 'series'">        
+        <div id="shootingDisplayContainer">
+            <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
+                <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
+                <div class="scoreTextTopRightContainer">
+                    <div class="scoreTextTopRight">SCORE</div>
+                </div>
+                <div class="scoreShotValueContainer">
+                    <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
+                </div>
+                <div class="scoreTotalContainer">
+                    <div class="scoreTotal">{{ data.totalScore }}</div>
+                </div>
+                <div class="scoreTotalTextContainer">
+                    <div class="scoreTotalText">Total</div>
+                </div>
+                <div class="nameTextContainer">
+                    <div class="nameText">{{ formatName(data.name) }}</div>
+                </div>
+                <div class="clubTextContainer">
+                    <div class="clubText"><img :src="svgSource(parseClubData(data.club).nation)" alt="nation" /><span>{{ parseClubData(data.club).club }}</span></div>
+                </div>
             </div>
         </div>
     </div>
@@ -71,6 +73,7 @@ export default {
             const sixthElimination = active === 2;
             const finalElimination = active === 1;
 
+            // Return the stage information
             return {
                 fiveShotsSeries,
                 firstElimination,
