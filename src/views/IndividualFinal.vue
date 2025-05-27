@@ -1,5 +1,5 @@
 <template>
-    <div v-if="stageInfo.stage === 'series'">        
+    <div v-if="stageInfo.stage === 'series' || stageInfo.stage === 'presentation'">        
         <div id="shootingDisplayContainer">
             <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
                 <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
