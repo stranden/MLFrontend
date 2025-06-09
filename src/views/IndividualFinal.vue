@@ -1,5 +1,5 @@
 <template>
-    <div v-if="stageInfo.fiveShotsSeries">        
+    <div v-if="stageInfo.fiveShotsSeries || stageInfo.firstSingleShotSeries">        
         <div id="shootingDisplayContainer">
             <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
                 <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
@@ -24,7 +24,7 @@
             </div>
         </div>
     </div>
-    <div v-else-if="stageInfo.seriesTypeShootoff">        
+    <div v-else-if="stageInfo.shootOffSeries">        
         <div id="shootingDisplayContainer">
             <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
                 <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
@@ -96,6 +96,8 @@ export default {
             const sixthSingleShotSeries = active === 3 && !seriesTypeShootoff;
             const seventhSingleShotSeries = active === 2 && !seriesTypeShootoff;
 
+            const shootOffSeries = seriesTypeShootoff && hasShootOff;
+
             // Return the stage information
             return {
                 fiveShotsSeries,
@@ -107,7 +109,7 @@ export default {
                 sixthSingleShotSeries,
                 seventhSingleShotSeries,
                 hasShootOff,
-                seriesTypeShootoff,
+                shootOffSeries,
                 hasPendingElimination,
                 stage: fiveShotsSeries ? 'series'
                     : firstSingleShotSeries ? 'first-single-shot-series'
@@ -118,7 +120,7 @@ export default {
                     : sixthSingleShotSeries ? 'sixth-single-shot-series'
                     : seventhSingleShotSeries ? 'final-single-shot-series'
                     : hasShootOff ? 'shootoff'
-                    : seriesTypeShootoff ? 'series-type-shootoff'
+                    : shootOffSeries ? 'series-shootoff'
                     : hasPendingElimination ? 'presentation'
                     : 'regular'
             };
@@ -157,5 +159,210 @@ export default {
 </script>
 
 <style scoped>
-/* Add styles for IndividualFinal */
+#shootingDisplayContainer {
+    position: absolute;
+    left: 5vmax;
+    bottom: 5vmax;
+    width: calc(100vw - 2 * 5vmax);
+    display: flex;
+    justify-content: center;
+    gap: 2%;
+}
+
+.shootingDisplay {
+    position: relative;
+    flex: 1;
+    column-gap: 0%;
+}
+
+/* Shooters which is eliminated normal */
+.shootingDisplayE::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.75); /* Grey with 75% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Shooters which is eliminated after shoot off */
+.shootingDisplayES::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.75); /* Grey with 75% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Shooters to be elminated */
+.shootingDisplayP::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(190, 28, 28, 0.5); /* Red with 50% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Shooters in a shoot off */
+.shootingDisplayT::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 143, 0, 0.5); /* Green with 50% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+/* Shooters to be elminated in a shoot off*/
+.shootingDisplaySP::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(190, 28, 28, 0.5); /* Red with 50% opacity */
+    z-index: 2; /* Ensure it overlays the nested elements */
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.shootingDisplay .scoreTextTopRightContainer,
+.shootingDisplay .scoreShotValueContainer,
+.shootingDisplay .scoreTotalContainer,
+.shootingDisplay .scoreTotalTextContainer {
+    position: relative;
+    top: 0;
+}
+
+.shootingDisplay .scoreTextTopRightContainer .scoreTextTopRight,
+.shootingDisplay .scoreShotValueContainer .scoreShotValue,
+.shootingDisplay .scoreTotalContainer .scoreTotal,
+.shootingDisplay .scoreTotalTextContainer .scoreTotalText {
+    position: relative;
+    left: 4.25vmax; /* Adjust according to target size */
+    width: calc(100% - 4.25vmax); /* Adjust width accordingly */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.shootingDisplay .scoreTextTopRightContainer {
+    background-color: #cecece;
+    border-top-right-radius: 10px;
+    opacity: 0.5; /* 50% opacity */
+}
+
+.shootingDisplay .scoreTextTopRightContainer .scoreTextTopRight {
+    height: 1.5vh;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 0.8rem;
+}
+
+.shootingDisplay .scoreShotValueContainer {
+    background-color: #37a746;
+}
+
+.shootingDisplay .scoreShotValueContainer .scoreShotValue {
+    height: 2.5vh;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+.shootingDisplay .scoreTotalContainer,
+.shootingDisplay .scoreTotalTextContainer {
+    width: 100%; /* Adjust width accordingly */
+}
+
+.shootingDisplay .scoreTotalContainer {
+    background-color: #004e0a;
+}
+
+.shootingDisplay .scoreTotalContainer .scoreTotal {
+    height: 2.5vh;
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #eeeeee;
+}
+
+.shootingDisplay .scoreTotalTextContainer {
+    background-color: #cecece;
+}
+
+.shootingDisplay .scoreTotalTextContainer .scoreTotalText {
+    height: 2vh;
+    font-style: italic;
+    font-weight: bolder;
+    font-size: 0.8rem;
+}
+
+.shootingDisplay .nameTextContainer,
+.shootingDisplay .clubTextContainer {
+    width: 100%;
+}
+
+.shootingDisplay .nameTextContainer .nameText,
+.shootingDisplay .clubTextContainer .clubText {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    padding-left: 0.25vw;
+}
+
+.shootingDisplay .nameTextContainer {
+    background-color: #3b3b3b;
+    opacity: 1; /* 50% opacity */
+}
+
+.shootingDisplay .nameTextContainer .nameText {
+    height: 2.5vh;
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: #eeeeee;
+}
+
+.shootingDisplay .clubTextContainer {
+    background-color: #cecece;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.shootingDisplay .clubTextContainer .clubText {
+    height: 2vh;
+}
+
+.shootingDisplay .clubTextContainer .clubText img {
+    height: 1vh;
+    border-radius: 25%;
+}
+
+.shootingDisplay .clubTextContainer .clubText span {
+    font-weight: bolder;
+    font-size: 1rem;
+    padding-left: 0.25vw;
+}
 </style>
