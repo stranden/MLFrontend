@@ -1,78 +1,26 @@
-<template>
-    <div v-if="stageInfo.fiveShotsSeries">        
-        <div id="shootingDisplayContainer">
-            <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
-                <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
-                <div class="scoreTextTopRightContainer">
-                    <div class="scoreTextTopRight">SCORE</div>
-                </div>
-                <div class="scoreShotValueContainer">
-                    <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
-                </div>
-                <div class="scoreTotalContainer">
-                    <div class="scoreTotal">{{ data.totalScore }}</div>
-                </div>
-                <div class="scoreTotalTextContainer">
-                    <div class="scoreTotalText">Total</div>
-                </div>
-                <div class="nameTextContainer">
-                    <div class="nameText">{{ formatName(data.name) }}</div>
-                </div>
-                <div class="clubTextContainer">
-                    <div class="clubText">
-                        <img :src="svgSource(parseClubData(data.club).nation)" alt="nation" />
-                        <span>{{ parseClubData(data.club).club }}</span>
-                    </div>
-                </div>
+<template>        
+    <div v-if="stageInfo.stage != 'unknown'" id="shootingDisplayContainer" :class="'stage-' + stageInfo.stage">
+        <div v-for="(data, index) in activeShooters" :key="index" class="shootingDisplay" :class="getShooterClass(data.flags)">
+            <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
+            <div class="scoreTextTopRightContainer">
+                <div class="scoreTextTopRight">SCORE</div>
             </div>
-        </div>
-    </div>
-    <div v-if="stageInfo.firstSingleShotSeries">        
-        <div id="shootingDisplayContainer">
-            <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
-                <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
-                <div class="scoreTextTopRightContainer">
-                    <div class="scoreTextTopRight">SCORE</div>
-                </div>
-                <div class="scoreShotValueContainer">
-                    <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
-                </div>
-                <div class="scoreTotalContainer">
-                    <div class="scoreTotal">{{ data.totalScore }}</div>
-                </div>
-                <div class="scoreTotalTextContainer">
-                    <div class="scoreTotalText">Total</div>
-                </div>
-                <div class="nameTextContainer">
-                    <div class="nameText">{{ formatName(data.name) }}</div>
-                </div>
-                <div class="clubTextContainer">
-                    <div class="clubText">
-                        <img :src="svgSource(parseClubData(data.club).nation)" alt="nation" />
-                        <span>{{ parseClubData(data.club).club }}</span>
-                    </div>
-                </div>
+            <div class="scoreShotValueContainer">
+                <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
             </div>
-        </div>
-    </div>
-    <div v-else-if="stageInfo.shootOffSeries">        
-        <div id="shootingDisplayContainer">
-            <div v-for="(data, index) in activeShooters" :key="index" :class="getShooterClass(data.flags)">
-                <Target :targetName="data.targetId" :shotData="extractShotsForShooter(data)" :flags="data.flags" />
-                <div class="scoreTextTopRightContainer">
-                    <div class="scoreTextTopRight">SCORE</div>
-                </div>
-                <div class="scoreShotValueContainer">
-                    <div class="scoreShotValue">{{ data.shots.length > 0 ? data.shots[data.shots.length - 1].vd : '0.0' }}</div>
-                </div>
-                <div class="scoreTotalContainer">
-                    <div class="scoreTotal">{{ data.totalScore }}</div>
-                </div>
-                <div class="scoreTotalTextContainer">
-                    <div class="scoreTotalText">Total</div>
-                </div>
-                <div class="nameTextContainer">
-                    <div class="nameText">{{ formatName(data.name) }}</div>
+            <div class="scoreTotalContainer">
+                <div class="scoreTotal">{{ data.totalScore }}</div>
+            </div>
+            <div class="scoreTotalTextContainer">
+                <div class="scoreTotalText">Total</div>
+            </div>
+            <div class="nameTextContainer">
+                <div class="nameText">{{ formatName(data.name) }}</div>
+            </div>
+            <div class="clubTextContainer">
+                <div class="clubText">
+                    <img :src="svgSource(parseClubData(data.club).nation)" alt="nation" />
+                    <span>{{ parseClubData(data.club).club }}</span>
                 </div>
             </div>
         </div>
@@ -139,7 +87,6 @@ export default {
                 fifthSingleShotSeries,
                 sixthSingleShotSeries,
                 seventhSingleShotSeries,
-                hasShootOff,
                 shootOffSeries,
                 hasPendingElimination,
                 stage: fiveShotsSeries ? 'series'
@@ -149,11 +96,29 @@ export default {
                     : fourthSingleShotSeries ? 'fourth-single-shot-series'
                     : fifthSingleShotSeries ? 'fifth-single-shot-series'
                     : sixthSingleShotSeries ? 'sixth-single-shot-series'
-                    : seventhSingleShotSeries ? 'final-single-shot-series'
-                    : hasShootOff ? 'shootoff'
+                    : seventhSingleShotSeries ? 'seventh-single-shot-series'
                     : shootOffSeries ? 'series-shootoff'
                     : hasPendingElimination ? 'presentation'
-                    : 'regular'
+                    : 'unknown'
+            };
+        },
+        shootingDisplayStyle() {
+            const count = this.activeShooters.length;
+
+            // Base values
+            const maxGapPercent = 4; // max spacing between shooter blocks
+            const minGapPercent = 1; // minimum spacing
+
+            // Responsive gap calculation based on shooter count
+            const calculatedGap = Math.max(minGapPercent, Math.min(maxGapPercent, 12 / count));
+
+            // Dynamic width: assuming you want to keep left and right margins (e.g., 5vmax)
+            const totalHorizontalMargin = 10; // 5vmax left + 5vmax right
+            const totalWidth = `calc(100vw - ${totalHorizontalMargin}vmax)`;
+
+            return {
+                width: totalWidth,
+                gap: `${calculatedGap}%`,
             };
         }
     },
@@ -167,8 +132,7 @@ export default {
                 'shootingDisplayES': flags === 'ES',
                 'shootingDisplayT': flags === 'T',
                 'shootingDisplayP': flags === 'P',
-                'shootingDisplaySP': flags === 'SP',
-                'shootingDisplay': true
+                'shootingDisplaySP': flags === 'SP'
             };
         },
         // Include all shooters (no filtering)
@@ -190,83 +154,94 @@ export default {
 </script>
 
 <style scoped>
+/* Base container styling */
 #shootingDisplayContainer {
     position: absolute;
     left: 5vmax;
+    right: 5vmax;
     bottom: 5vmax;
-    width: calc(100vw - 2 * 5vmax);
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
-    gap: 2%;
+    align-items: flex-end;
+    transition: all 0.5s ease;
+    top: auto;
+    height: auto;
 }
 
+/* Responsive shooter display styling */
 .shootingDisplay {
     position: relative;
     flex: 1;
-    column-gap: 0%;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    margin-bottom: 0;
 }
 
-/* Shooters which is eliminated normal */
-.shootingDisplayE::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(128, 128, 128, 0.75); /* Grey with 75% opacity */
-    z-index: 2; /* Ensure it overlays the nested elements */
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+/* Stage-based width and gap adjustments */
+#shootingDisplayContainer.stage-series {
+    gap: 1.75vmax;
+}
+#shootingDisplayContainer.stage-series .shootingDisplay {
+    width: 20vmax;
+}
+#shootingDisplayContainer.stage-first-single-shot-series {
+    gap: 1.75vmax;
+}
+#shootingDisplayContainer.stage-first-single-shot-series .shootingDisplay {
+    width: 20vmax;
+}
+#shootingDisplayContainer.stage-second-single-shot-series {
+    gap: 2.75vmax;
+}
+#shootingDisplayContainer.stage-second-single-shot-series .shootingDisplay {
+    width: 20vmax;
+}
+#shootingDisplayContainer.stage-third-single-shot-series {
+    gap: 3.75vmax;
+}
+#shootingDisplayContainer.stage-third-single-shot-series .shootingDisplay {
+    width: 20vmax;
+}
+#shootingDisplayContainer.stage-fourth-single-shot-series {
+    gap: 4.75vmax;
+}
+#shootingDisplayContainer.stage-fourth-single-shot-series .shootingDisplay {
+    width: 20vmax;
+}
+#shootingDisplayContainer.stage-fifth-single-shot-series {
+    gap: 5.75vmax;
+}
+#shootingDisplayContainer.stage-fifth-single-shot-series .shootingDisplay {
+    width: 20vmax;
+}
+#shootingDisplayContainer.stage-sixth-single-shot-series {
+    gap: 6.75vmax;
+}
+#shootingDisplayContainer.stage-sixth-single-shot-series .shootingDisplay {
+    width: 20vmax;
+}
+#shootingDisplayContainer.stage-seventh-single-shot-series {
+    gap: 7.75vmax;
+}
+#shootingDisplayContainer.stage-seventh-single-shot-series .shootingDisplay {
+    width: 20vmax;
 }
 
-/* Shooters which is eliminated after shoot off */
-.shootingDisplayES::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(128, 128, 128, 0.75); /* Grey with 75% opacity */
-    z-index: 2; /* Ensure it overlays the nested elements */
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+/* Shootoff stages */
+#shootingDisplayContainer.stage-series-shootoff {
+    gap: 7.75vmax;
+}
+#shootingDisplayContainer.stage-series-shootoff .shootingDisplay {
+    width: 20vmax;
 }
 
-/* Shooters to be elminated */
-.shootingDisplayP::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(190, 28, 28, 0.5); /* Red with 50% opacity */
-    z-index: 2; /* Ensure it overlays the nested elements */
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-/* Shooters in a shoot off */
-.shootingDisplayT::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 143, 0, 0.5); /* Green with 50% opacity */
-    z-index: 2; /* Ensure it overlays the nested elements */
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
-}
-
-/* Shooters to be elminated in a shoot off*/
+/* Status overlays */
+.shootingDisplayE::before,
+.shootingDisplayES::before,
+.shootingDisplayT::before,
+.shootingDisplayP::before,
 .shootingDisplaySP::before {
     content: "";
     position: absolute;
@@ -274,124 +249,136 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(190, 28, 28, 0.5); /* Red with 50% opacity */
-    z-index: 2; /* Ensure it overlays the nested elements */
-    border-top-right-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    z-index: 2;
+    border-radius: 10px;
 }
 
-.shootingDisplay .scoreTextTopRightContainer,
-.shootingDisplay .scoreShotValueContainer,
-.shootingDisplay .scoreTotalContainer,
-.shootingDisplay .scoreTotalTextContainer {
+.shootingDisplayE::before,
+.shootingDisplayES::before {
+    background-color: rgba(128, 128, 128, 0.75);
+}
+
+.shootingDisplayP::before,
+.shootingDisplaySP::before {
+    background-color: rgba(190, 28, 28, 0.5);
+}
+
+.shootingDisplayT::before {
+    background-color: rgba(0, 143, 0, 0.5);
+}
+
+/* Inner element styles */
+.scoreTextTopRightContainer,
+.scoreShotValueContainer,
+.scoreTotalContainer,
+.scoreTotalTextContainer {
     position: relative;
     top: 0;
 }
 
-.shootingDisplay .scoreTextTopRightContainer .scoreTextTopRight,
-.shootingDisplay .scoreShotValueContainer .scoreShotValue,
-.shootingDisplay .scoreTotalContainer .scoreTotal,
-.shootingDisplay .scoreTotalTextContainer .scoreTotalText {
+.scoreTextTopRightContainer .scoreTextTopRight,
+.scoreShotValueContainer .scoreShotValue,
+.scoreTotalContainer .scoreTotal,
+.scoreTotalTextContainer .scoreTotalText {
     position: relative;
-    left: 4.25vmax; /* Adjust according to target size */
-    width: calc(100% - 4.25vmax); /* Adjust width accordingly */
+    left: 4.25vmax;
+    width: calc(100% - 4.25vmax);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.shootingDisplay .scoreTextTopRightContainer {
+.scoreTextTopRightContainer {
     background-color: #cecece;
     border-top-right-radius: 10px;
-    opacity: 0.5; /* 50% opacity */
+    opacity: 0.5;
 }
 
-.shootingDisplay .scoreTextTopRightContainer .scoreTextTopRight {
+.scoreTextTopRightContainer .scoreTextTopRight {
     height: 1.5vh;
     font-style: italic;
     font-weight: bolder;
     font-size: 0.8rem;
 }
 
-.shootingDisplay .scoreShotValueContainer {
+.scoreShotValueContainer {
     background-color: #37a746;
 }
 
-.shootingDisplay .scoreShotValueContainer .scoreShotValue {
+.scoreShotValueContainer .scoreShotValue {
     height: 2.5vh;
     font-weight: bold;
     font-size: 1.5rem;
 }
 
-.shootingDisplay .scoreTotalContainer,
-.shootingDisplay .scoreTotalTextContainer {
-    width: 100%; /* Adjust width accordingly */
+.scoreTotalContainer,
+.scoreTotalTextContainer {
+    width: 100%;
 }
 
-.shootingDisplay .scoreTotalContainer {
+.scoreTotalContainer {
     background-color: #004e0a;
 }
 
-.shootingDisplay .scoreTotalContainer .scoreTotal {
+.scoreTotalContainer .scoreTotal {
     height: 2.5vh;
     font-weight: bold;
     font-size: 1.5rem;
     color: #eeeeee;
 }
 
-.shootingDisplay .scoreTotalTextContainer {
+.scoreTotalTextContainer {
     background-color: #cecece;
 }
 
-.shootingDisplay .scoreTotalTextContainer .scoreTotalText {
+.scoreTotalTextContainer .scoreTotalText {
     height: 2vh;
     font-style: italic;
     font-weight: bolder;
     font-size: 0.8rem;
 }
 
-.shootingDisplay .nameTextContainer,
-.shootingDisplay .clubTextContainer {
+.nameTextContainer,
+.clubTextContainer {
     width: 100%;
 }
 
-.shootingDisplay .nameTextContainer .nameText,
-.shootingDisplay .clubTextContainer .clubText {
+.nameTextContainer .nameText,
+.clubTextContainer .clubText {
     display: flex;
     justify-content: left;
     align-items: center;
     padding-left: 0.25vw;
 }
 
-.shootingDisplay .nameTextContainer {
+.nameTextContainer {
     background-color: #3b3b3b;
-    opacity: 1; /* 50% opacity */
+    opacity: 1;
 }
 
-.shootingDisplay .nameTextContainer .nameText {
+.nameTextContainer .nameText {
     height: 2.5vh;
     font-weight: bold;
     font-size: 1.25rem;
     color: #eeeeee;
 }
 
-.shootingDisplay .clubTextContainer {
+.clubTextContainer {
     background-color: #cecece;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
 
-.shootingDisplay .clubTextContainer .clubText {
+.clubTextContainer .clubText {
     height: 2vh;
 }
 
-.shootingDisplay .clubTextContainer .clubText img {
+.clubTextContainer .clubText img {
     height: 1vh;
     border-radius: 25%;
 }
 
-.shootingDisplay .clubTextContainer .clubText span {
+.clubTextContainer .clubText span {
     font-weight: bolder;
     font-size: 1rem;
     padding-left: 0.25vw;
