@@ -101,25 +101,6 @@ export default {
                     : hasPendingElimination ? 'presentation'
                     : 'unknown'
             };
-        },
-        shootingDisplayStyle() {
-            const count = this.activeShooters.length;
-
-            // Base values
-            const maxGapPercent = 4; // max spacing between shooter blocks
-            const minGapPercent = 1; // minimum spacing
-
-            // Responsive gap calculation based on shooter count
-            const calculatedGap = Math.max(minGapPercent, Math.min(maxGapPercent, 12 / count));
-
-            // Dynamic width: assuming you want to keep left and right margins (e.g., 5vmax)
-            const totalHorizontalMargin = 10; // 5vmax left + 5vmax right
-            const totalWidth = `calc(100vw - ${totalHorizontalMargin}vmax)`;
-
-            return {
-                width: totalWidth,
-                gap: `${calculatedGap}%`,
-            };
         }
     },
     methods: {
@@ -189,53 +170,51 @@ export default {
 #shootingDisplayContainer.stage-first-single-shot-series {
     gap: 1.75vmax;
 }
-#shootingDisplayContainer.stage-first-single-shot-series .shootingDisplay {
+/*#shootingDisplayContainer.stage-first-single-shot-series .shootingDisplay {
     width: 20vmax;
-}
+}*/
 #shootingDisplayContainer.stage-second-single-shot-series {
     gap: 2.75vmax;
 }
-#shootingDisplayContainer.stage-second-single-shot-series .shootingDisplay {
+/*#shootingDisplayContainer.stage-second-single-shot-series .shootingDisplay {
     width: 20vmax;
-}
+}*/
 #shootingDisplayContainer.stage-third-single-shot-series {
     gap: 3.75vmax;
 }
-#shootingDisplayContainer.stage-third-single-shot-series .shootingDisplay {
+/*#shootingDisplayContainer.stage-third-single-shot-series .shootingDisplay {
     width: 20vmax;
-}
+}*/
 #shootingDisplayContainer.stage-fourth-single-shot-series {
     gap: 4.75vmax;
 }
-#shootingDisplayContainer.stage-fourth-single-shot-series .shootingDisplay {
+/*#shootingDisplayContainer.stage-fourth-single-shot-series .shootingDisplay {
     width: 20vmax;
-}
+}*/
 #shootingDisplayContainer.stage-fifth-single-shot-series {
     gap: 5.75vmax;
 }
-#shootingDisplayContainer.stage-fifth-single-shot-series .shootingDisplay {
+/*#shootingDisplayContainer.stage-fifth-single-shot-series .shootingDisplay {
     width: 20vmax;
-}
+}*/
 #shootingDisplayContainer.stage-sixth-single-shot-series {
     gap: 6.75vmax;
 }
-#shootingDisplayContainer.stage-sixth-single-shot-series .shootingDisplay {
+/*#shootingDisplayContainer.stage-sixth-single-shot-series .shootingDisplay {
     width: 20vmax;
-}
+}*/
 #shootingDisplayContainer.stage-seventh-single-shot-series {
     gap: 7.75vmax;
 }
-#shootingDisplayContainer.stage-seventh-single-shot-series .shootingDisplay {
+/*#shootingDisplayContainer.stage-seventh-single-shot-series .shootingDisplay {
     width: 20vmax;
-}
-
-/* Shootoff stages */
+}*/
 #shootingDisplayContainer.stage-series-shootoff {
     gap: 7.75vmax;
 }
-#shootingDisplayContainer.stage-series-shootoff .shootingDisplay {
+/*#shootingDisplayContainer.stage-series-shootoff .shootingDisplay {
     width: 20vmax;
-}
+}*/
 
 /* Status overlays */
 .shootingDisplayE::before,
