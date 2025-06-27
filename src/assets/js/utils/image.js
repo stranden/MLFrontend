@@ -13,6 +13,5 @@ export function svgSource(country) {
 }
 
 export function countryFlag(country) {
-    console.log(`countryFlag: ${country}`);
     return `fi fi-${convertIocToAlpha2(country).toLowerCase()} fi-rounded`;
 }

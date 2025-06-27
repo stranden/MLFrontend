@@ -1,5 +1,5 @@
 <template>
-    <svg ref="targetSVG" :class="{ 'targetE': this.flags === 'E', 'targetES': this.flags === 'ES', 'targetT': this.flags === 'T', 'targetP': this.flags === 'P', 'targetSP': this.flags === 'SP', 'target': true }"></svg>
+    <svg ref="targetSVG" class="target"></svg>
 </template>
 
 <script>
@@ -33,11 +33,6 @@ export default {
         }
     },
     methods: {
-        /*drawTarget() {
-            const targetSVG = this.$refs.targetSVG;
-            const targetContainerWidth = targetSVG.clientWidth;
-            createTarget(this.targetName, targetSVG, targetContainerWidth, this.shotData);
-        }*/
         drawTarget() {
             const targetSVG = this.$refs.targetSVG;
             const targetContainerWidth = targetSVG.clientWidth;
@@ -77,5 +72,17 @@ export default {
 </script>
 
 <style scoped>
-/* Styles for Target.vue */
+.target {
+    position: absolute;
+    top: -0.75vmax;
+    left: -0.75vmax;
+    width: 5vmax; /* Adjust size as needed */
+    height: 5vmax; /* Adjust size as needed */
+    border-radius: 50%; /* Makes it a circle */
+    border-color: #e6e6e6;
+    /* border-color: #ffffff; */
+    border-style: solid;
+    border-width: 0.1rem;
+    z-index: 2;
+}
 </style>
