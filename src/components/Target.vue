@@ -76,8 +76,8 @@ export default {
     position: absolute;
     top: -0.75vmax;
     left: -0.75vmax;
-    width: 5vmax; /* Adjust size as needed */
-    height: 5vmax; /* Adjust size as needed */
+    width: 4.5vmax; /* Adjust size as needed */
+    height: 4.5vmax; /* Adjust size as needed */
     border-radius: 50%; /* Makes it a circle */
     border-color: #e6e6e6;
     /* border-color: #ffffff; */
