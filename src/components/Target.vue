@@ -79,7 +79,7 @@ export default {
     width: 5vmax; /* Adjust size as needed */
     height: 5vmax; /* Adjust size as needed */
     border-radius: 50%; /* Makes it a circle */
-    border-color: #cecece;
+    border-color: #e6e6e6;
     /* border-color: #ffffff; */
     border-style: solid;
     border-width: 0.1rem;

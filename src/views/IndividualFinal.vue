@@ -234,15 +234,18 @@ export default {
 
 .shootingDisplayE::before,
 .shootingDisplayES::before {
+    /*background-color: rgba(128, 128, 128, 0.75);*/
     background-color: rgba(128, 128, 128, 0.75);
 }
 
 .shootingDisplayP::before,
 .shootingDisplaySP::before {
+    /*background-color: rgba(190, 28, 28, 0.5);*/
     background-color: rgba(190, 28, 28, 0.5);
 }
 
 .shootingDisplayT::before {
+    /*background-color: rgba(0, 143, 0, 0.5);*/
     background-color: rgba(0, 143, 0, 0.5);
 }
 
@@ -268,7 +271,8 @@ export default {
 }
 
 .scoreTextTopRightContainer {
-    background-color: #cecece;
+    /*background-color: #cecece;*/
+    background-color: #e6e6e6;
     border-top-right-radius: 10px;
     opacity: 0.5;
 }
@@ -281,7 +285,11 @@ export default {
 }
 
 .scoreShotValueContainer {
-    background-color: #37a746;
+    /*background-color: #37a746;*/
+    background-color: rgba(0, 0, 75, 0.825);
+    /*color: rgb(255, 210, 0, 0.6);*/
+    /*color: rgb(238, 238, 238, 0.5);*/
+    color: #888;
 }
 
 .scoreShotValueContainer .scoreShotValue {
@@ -296,7 +304,8 @@ export default {
 }
 
 .scoreTotalContainer {
-    background-color: #004e0a;
+    /*background-color: #004e0a;*/
+    background-color: rgb(0, 0, 75);
 }
 
 .scoreTotalContainer .scoreTotal {
@@ -304,10 +313,12 @@ export default {
     font-weight: bold;
     font-size: 1.5rem;
     color: #eeeeee;
+    /*color: #ffd200;*/
 }
 
 .scoreTotalTextContainer {
-    background-color: #cecece;
+    /*background-color: #cecece;*/
+    background-color: #e6e6e6;
 }
 
 .scoreTotalTextContainer .scoreTotalText {
@@ -331,7 +342,8 @@ export default {
 }
 
 .nameTextContainer {
-    background-color: #3b3b3b;
+    /*background-color: #3b3b3b;*/
+    background-color: #00004b;
     opacity: 1;
 }
 
@@ -340,10 +352,12 @@ export default {
     font-weight: bold;
     font-size: 1.25rem;
     color: #eeeeee;
+    /*color: rgb(255, 210, 0);*/
 }
 
 .clubTextContainer {
-    background-color: #cecece;
+    /*background-color: #cecece;*/
+    background-color: #e6e6e6;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
