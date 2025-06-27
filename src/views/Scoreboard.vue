@@ -287,7 +287,7 @@ export default {
     font-weight: bold;
     /*background-color: #1c9c4a; /* Green background for rank */
     background-color: #00004b;
-    color: white;
+    color: #e6e6e6;
     /*color: #ffd200;*/
     width: 2.5rem;
     height: 2.5rem;
@@ -323,7 +323,7 @@ export default {
 .total-score-container {
     font-size: 1.2rem; /* Increased font size to match rank and name */
     font-weight: bold;
-    color: white;
+    color: #e6e6e6;
     /*color: #ffd200;*/
     text-align: center;
     display: flex;
@@ -419,7 +419,7 @@ export default {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    color: white;
+    color: #e6e6e6;
     /*color: rgb(255, 210, 0, 0.6);*/
     border-top-left-radius: 1rem; /* Slightly rounded corners */
     /*border-top-right-radius: 0.5rem; /* Slightly rounded corners */
@@ -428,15 +428,18 @@ export default {
 }
 
 ::v-deep(.medal-circle.gold) {
-    background-color: #FFD700;
+    /*background-color: #FFD700;*/
+    background-color: rgba(0, 0, 75, 0.825);
 }
 
 ::v-deep(.medal-circle.silver) {
-    background-color: #C0C0C0;
+    /*background-color: #C0C0C0;*/
+    background-color: rgba(0, 0, 75, 0.825);
 }
 
 ::v-deep(.medal-circle.bronze) {
-    background-color: #CD7F32;
+    /*background-color: #CD7F32;*/
+    background-color: rgba(0, 0, 75, 0.825);
 }
 
 ::v-deep(.medal-circle.place) {
