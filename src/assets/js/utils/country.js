@@ -344,11 +344,11 @@ export function parseClubData(clubString) {
 
   if (parts.length >= 2) {
       const nation = parts[0];
-      const clubFull = parts.slice(1).join(', ');
-      const clubShort = clubFull.split(' ')[0];
+      const clubFull = parts.slice(1).join(', ').substring(0, 23).trim();
+      //const clubShort = clubFull.split(' ')[0];
       return {
           nation: nation.toUpperCase(),
-          club: clubShort.toUpperCase()
+          club: clubFull.toUpperCase()
       };
   } else {
       const firstWord = clubString.split(' ')[0];
