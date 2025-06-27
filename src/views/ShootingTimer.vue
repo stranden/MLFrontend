@@ -110,7 +110,8 @@ export default {
 .styled-timer {
   display: flex;
   align-items: center;
-  background-color: #1c9c4a; /* Green background matching the scoreboard rank circles */
+  /*background-color: #1c9c4a; /* Green background matching the scoreboard rank circles */
+  background-color: #00004b;
   padding: 0.25vh 0.5vw; /* Use vh and vw to scale padding */
   border-radius: 1rem; /* Scalable rounded corners */
   color: white;
